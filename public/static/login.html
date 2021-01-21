@@ -1,21 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style/style.css">
-    <title>login</title>
+    <title>login page</title>
 </head>
-<body>
-    <form id="login-form">
-        <h1>Login</h1><br>
-        username
-        <input type="text" name="username" id="username"><br>
-        password
-        <input type="password" name="password" id="password"><br>
-        <input type="submit">
-    </form>
 
+<body>
+    <div class="box">
+        <form id="login-form">
+            <h1>Login</h1><br>
+            <div class="text">
+                username<br><br>
+            </div>
+            <input type="text" name="username" id="username"><br><br>
+            <div class="text">
+                password<br><br>
+            </div>
+            <input type="password" name="password" id="password"><br><br>
+            <input type="submit" id="sub">
+        </form>
+    </div>
+    </div>
+    <script>
+        if (localStorage.getItem('token') !== null) {
+            location.replace('/data')
+        }
+    </script>
     <script src="/script/script.js"></script>
 </body>
+
 </html>

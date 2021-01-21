@@ -15,6 +15,10 @@ router.get('/', async (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'static', 'login.html'))
 })
 
+router.get('/data', async (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'data.html'))
+})
+
 router.post('/api/register', async (req, res) => {
     const { username, password: pass } = req.body;
     const password = await bcrypt.hash(pass, 10);
@@ -53,6 +57,21 @@ router.post('/api/login', async (req, res) => {
     return res.json({ status: "error", data: 'invalid username or password' });
 })
 
+router.post('/api/token', async (req, res) => {
+    const { token } = req.body;
+
+    if (!token) {
+        return res.json({ status: 'error', error: 'no token' });
+    }
+
+    try {
+        let user = jwt.verify(token, JWT_SECRET);
+        console.log(user);
+        return res.json({ status: 'ok', user: user.user });
+    } catch(err) {
+        return res.json({ status: 'error', error: 'wrong token' });
+    }
+})
 
 
 

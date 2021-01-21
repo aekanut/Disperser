@@ -1,11 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+    <script src="/script/script.js"></script>
+    <script>
+        checkToken(localStorage.getItem('token'))
+        const logout = () => {
+            localStorage.removeItem('token');
+            location.replace("/")
+        }
+        
+        const idCard = () => {
+            location.replace("/edit/idcard")
+        }
+
+        const studentCard = () => {
+            location.replace("/edit/studentcard")
+        }
+        
+    </script>
+    <link rel="stylesheet" href="/style/style.css">
+    <title>show history</title>
     
+</head>
+
+<body>
+    <input type="button" value="Add ID Card" onclick="idCard()">
+    <input type="button" value="Add Student Card" onclick="studentCard()"><br>
+    <input type="button" value="logout" onclick="logout()">
 </body>
+
 </html>
