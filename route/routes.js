@@ -66,7 +66,7 @@ router.post('/api/token', async (req, res) => {
 
     try {
         let user = jwt.verify(token, JWT_SECRET);
-        console.log(user);
+        //console.log(user);
         return res.json({ status: 'ok', user: user.user });
     } catch(err) {
         return res.json({ status: 'error', error: 'wrong token' });

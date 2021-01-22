@@ -4,14 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="/script/script.js"></script>
+    <link rel="stylesheet" href="/style/style.css">
+    <title>show history</title>
+
+</head>
+
+<body>
+    <input type="button" value="Add ID Card" onclick="idCard()">
+    <input type="button" value="Add Student Card" onclick="studentCard()"><br>
+    <input type="button" value="logout" onclick="logout()">
+    <div class="shit" id="soshit"></div>
+
+    <script src="/script/datascript.js"></script>
     <script>
         checkToken(localStorage.getItem('token'))
         const logout = () => {
             localStorage.removeItem('token');
             location.replace("/")
         }
-        
+
         const idCard = () => {
             location.replace("/edit/idcard")
         }
@@ -19,17 +30,23 @@
         const studentCard = () => {
             location.replace("/edit/studentcard")
         }
-        
-    </script>
-    <link rel="stylesheet" href="/style/style.css">
-    <title>show history</title>
-    
-</head>
 
-<body>
-    <input type="button" value="Add ID Card" onclick="idCard()">
-    <input type="button" value="Add Student Card" onclick="studentCard()"><br>
-    <input type="button" value="logout" onclick="logout()">
+
+        fetch('/api/allidcard').
+            then(res => res.json()).
+            then(data => {
+                let dataTable = `<table><tr><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th></tr>`
+                data.forEach(element => {
+                    dataTable += `<tr><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.idcard}</th><th>${element.dateofbirth}</th></tr>`
+                });
+                dataTable += '</table>'
+                console.log(dataTable)
+                console.log(data)
+                document.getElementById('soshit').innerHTML = dataTable;
+            })
+      
+
+    </script>
 </body>
 
 </html>

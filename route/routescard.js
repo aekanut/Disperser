@@ -7,6 +7,26 @@ mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCrea
 const studentCard = require('../model/memberbystudentcard');
 const idCard = require('../model/memberbyidcard');
 
+router.get('/api/allidcard', async (req, res) => {
+    try {
+        const allIdCard = await idCard.find({})
+        
+        return res.json(allIdCard)
+    } catch (err) {
+        return res.json({status: 'error'})
+    }
+})
+
+router.get('/api/allstudentcard', async (req, res) => {
+    try {
+        const allIdCard = await studentCard.find({})
+        
+        return res.json(allIdCard)
+    } catch (err) {
+        return res.json({status: 'error'})
+    }
+})
+
 router.post('/api/addidcard', async (req, res) => {
     let { firstname, lastname, idcard, dateofbirth } = req.body;
     try {
@@ -16,7 +36,7 @@ router.post('/api/addidcard', async (req, res) => {
             idcard,
             dateofbirth
         })
-        console.log(response)
+        
     } catch (err) {
         return res.json({ status: 'error', err })
     }
@@ -32,7 +52,7 @@ router.post('/api/addstudentcard', async (req, res) => {
             studentcard,
             faculty
         })
-        console.log(response)
+        
     } catch (err) {
         return res.json({ status: 'error', err })
     }
