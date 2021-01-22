@@ -9,8 +9,7 @@ const idCard = require('../model/memberbyidcard');
 
 router.get('/api/allidcard', async (req, res) => {
     try {
-        const allIdCard = await idCard.find({})
-        
+        const allIdCard = await idCard.find({}).sort('_id')
         return res.json(allIdCard)
     } catch (err) {
         return res.json({status: 'error'})
@@ -34,7 +33,8 @@ router.post('/api/addidcard', async (req, res) => {
             firstname,
             lastname,
             idcard,
-            dateofbirth
+            dateofbirth,
+            Date: new Date()
         })
         
     } catch (err) {
@@ -50,7 +50,8 @@ router.post('/api/addstudentcard', async (req, res) => {
             firstname,
             lastname,
             studentcard,
-            faculty
+            faculty,
+            Date: new Date()
         })
         
     } catch (err) {

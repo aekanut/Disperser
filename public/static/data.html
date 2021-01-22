@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style/style.css">
+    <link rel="stylesheet" href="/style/datastyle.css">
     <title>show history</title>
 
 </head>
@@ -13,11 +13,14 @@
     <input type="button" value="Add ID Card" onclick="idCard()">
     <input type="button" value="Add Student Card" onclick="studentCard()"><br>
     <input type="button" value="logout" onclick="logout()">
-    <div class="shit" id="soshit"></div>
+    <div class="shit" id="soshit"></div><br><br>
+    <div class="shit" id="soshits"></div>
 
     <script src="/script/datascript.js"></script>
     <script>
-        checkToken(localStorage.getItem('token'))
+        const useFn = async () => await checkToken(localStorage.getItem('token'))
+        useFn();
+
         const logout = () => {
             localStorage.removeItem('token');
             location.replace("/")
@@ -31,20 +34,30 @@
             location.replace("/edit/studentcard")
         }
 
-
         fetch('/api/allidcard').
             then(res => res.json()).
             then(data => {
-                let dataTable = `<table><tr><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th></tr>`
+                let dataTable = `<table><tr><th>Index</th><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
+Registration Date</th></tr>`
                 data.forEach(element => {
-                    dataTable += `<tr><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.idcard}</th><th>${element.dateofbirth}</th></tr>`
+                    dataTable += `<tr><th>${element._id}</th><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.idcard}</th><th>${element.dateofbirth}</th><th>${element.Date}</th></tr>`
                 });
                 dataTable += '</table>'
-                console.log(dataTable)
-                console.log(data)
                 document.getElementById('soshit').innerHTML = dataTable;
             })
-      
+
+        fetch('/api/allstudentcard').
+            then(res => res.json()).
+            then(data => {
+                let dataTable = `<table><tr><th>Index</th><th>First Name</th><th>Last Name</th><th>Student ID</th><th>Faculty</th><th>
+Registration Date</th></tr>`
+                data.forEach(element => {
+                    dataTable += `<tr><th>${element._id}</th><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.studentcard}</th><th>${element.faculty}</th><th>${element.Date}</th></tr>`
+                });
+                dataTable += '</table>'
+                document.getElementById('soshits').innerHTML = dataTable;
+            })
+
 
     </script>
 </body>
