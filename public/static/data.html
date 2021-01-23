@@ -13,13 +13,12 @@
     <input type="button" value="Add ID Card" onclick="idCard()">
     <input type="button" value="Add Student Card" onclick="studentCard()"><br>
     <input type="button" value="logout" onclick="logout()">
-    <div class="shit" id="soshit"></div><br><br>
-    <div class="shit" id="soshits"></div>
+    <div class="idCard"></div><br><br>
+    <div class="studentCard"></div>
 
     <script src="/script/datascript.js"></script>
     <script>
-        const useFn = async () => await checkToken(localStorage.getItem('token'))
-        useFn();
+        checkToken(localStorage.getItem('token'))
 
         const logout = () => {
             localStorage.removeItem('token');
@@ -27,35 +26,35 @@
         }
 
         const idCard = () => {
-            location.replace("/edit/idcard")
+            location.replace("/data/idcard")
         }
 
         const studentCard = () => {
-            location.replace("/edit/studentcard")
+            location.replace("/data/student")
         }
 
         fetch('/api/allidcard').
             then(res => res.json()).
             then(data => {
-                let dataTable = `<table><tr><th>Index</th><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
+                let dataTable = `<table><tr><th>Member ID</th><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
 Registration Date</th></tr>`
                 data.forEach(element => {
                     dataTable += `<tr><th>${element._id}</th><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.idcard}</th><th>${element.dateofbirth}</th><th>${element.Date}</th></tr>`
                 });
                 dataTable += '</table>'
-                document.getElementById('soshit').innerHTML = dataTable;
+                document.getElementsByClassName('idCard')[0].innerHTML = dataTable;
             })
 
         fetch('/api/allstudentcard').
             then(res => res.json()).
             then(data => {
-                let dataTable = `<table><tr><th>Index</th><th>First Name</th><th>Last Name</th><th>Student ID</th><th>Faculty</th><th>
+                let dataTable = `<table><tr><th>Member ID</th><th>First Name</th><th>Last Name</th><th>Student ID</th><th>Faculty</th><th>
 Registration Date</th></tr>`
                 data.forEach(element => {
                     dataTable += `<tr><th>${element._id}</th><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.studentcard}</th><th>${element.faculty}</th><th>${element.Date}</th></tr>`
                 });
                 dataTable += '</table>'
-                document.getElementById('soshits').innerHTML = dataTable;
+                document.getElementsByClassName('studentCard')[0].innerHTML = dataTable;
             })
 
 

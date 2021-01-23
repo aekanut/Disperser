@@ -28,6 +28,7 @@ router.get('/api/allstudentcard', async (req, res) => {
 
 router.post('/api/addidcard', async (req, res) => {
     let { firstname, lastname, idcard, dateofbirth } = req.body;
+    console.log(firstname,lastname,idcard,dateofbirth)
     try {
         const response = await idCard.create({
             firstname,
@@ -38,13 +39,14 @@ router.post('/api/addidcard', async (req, res) => {
         })
         
     } catch (err) {
-        return res.json({ status: 'error', err })
+        return res.json({ status: 'error', error: err })
     }
     return res.json({ status: 'ok' })
 })
 
 router.post('/api/addstudentcard', async (req, res) => {
     let { firstname, lastname, studentcard, faculty } = req.body;
+    console.log(firstname)
     try {
         const response = await studentCard.create({
             firstname,
@@ -55,7 +57,7 @@ router.post('/api/addstudentcard', async (req, res) => {
         })
         
     } catch (err) {
-        return res.json({ status: 'error', err })
+        return res.json({ status: 'error', 'error': err })
     }
     return res.json({ status: 'ok' })
 })

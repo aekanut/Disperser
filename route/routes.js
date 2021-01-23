@@ -19,6 +19,14 @@ router.get('/data', async (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'static', 'data.html'))
 })
 
+router.get('/data/idcard', async (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'addidcard.html'))
+})
+
+router.get('/data/student', async (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'addstudent.html'))
+})
+
 router.post('/api/register', async (req, res) => {
     const { username, password: pass } = req.body;
     const password = await bcrypt.hash(pass, 10);
@@ -69,6 +77,7 @@ router.post('/api/token', async (req, res) => {
         //console.log(user);
         return res.json({ status: 'ok', user: user.user });
     } catch(err) {
+        
         return res.json({ status: 'error', error: 'wrong token' });
     }
 })

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student Card</title>
+</head>
+<body>
+    <form id="addstudentcard">
+        Add Student Card<br>
+        First Name<br>
+        <input type="text" name="firstname" id="firstname"><br>
+        Last Name<br>
+        <input type="text" name="lastname" id="lastname"><br>
+        Student ID<br>
+        <input type="text" name="studentcard" id="studentcard"><br>
+        Faculty<br>
+        <input type="text" name="faculty" id="faculty"><br>
+        <input type="submit">
+    </form>
+
+    <script>
+        const addstudentcard = document.getElementById('addstudentcard')
+        addstudentcard.addEventListener('submit', addStudent)
+
+        async function addStudent(event) {
+            event.preventDefault()
+            const firstname = document.getElementById('firstname').value;
+            const lastname = document.getElementById('lastname').value;
+            const studentcard = document.getElementById('studentcard').value;
+            const faculty = document.getElementById('faculty').value;
+
+            const result = await fetch('/api/addstudentcard',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    firstname,
+                    lastname,
+                    studentcard,
+                    faculty
+                })
+            }).then((res) => res.json());
+
+            if (result.status === 'ok') {
+                alert("success")
+                location.replace('/data')
+            } else {
+                alert(result.error)
+            }
+
+        }
+    </script>
+</body>
+</html>
