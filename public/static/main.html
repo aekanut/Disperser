@@ -18,19 +18,24 @@
 
     <script src="/script/datascript.js"></script>
     <script>
-        checkToken(localStorage.getItem('token'))
+        const logout = async () => {
+            const result = await fetch('/api/logout', {
+                method: 'POST'
+            }).then((res) => res.json());
 
-        const logout = () => {
-            localStorage.removeItem('token');
-            location.replace("/")
+            if (result.status === 'ok') {
+                localStorage.removeItem('token');
+                location.replace('/')
+            }
+
         }
 
         const idCard = () => {
-            location.replace("/data/idcard")
+            location.replace("/main/idcard")
         }
 
         const studentCard = () => {
-            location.replace("/data/student")
+            location.replace("/main/student")
         }
 
         fetch('/api/allidcard').

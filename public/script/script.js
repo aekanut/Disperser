@@ -20,11 +20,9 @@ async function loginUser(event) {
     if (result.status === 'ok') {
         localStorage.setItem('token', result.token)
         alert('success')
-        location.replace("/data")
+        location.replace("/main")
     } else {
         alert(result.data)
     }
 }
-
-
 

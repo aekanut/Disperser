@@ -1,38 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add ID Card</title>
+    <title>Add Student Card</title>
 </head>
-
 <body>
-    <form id="addIdCard">
-        <h1>ADD ID Card</h1><br>
+    <form id="addstudentcard">
+        Add Student Card<br>
         First Name<br>
         <input type="text" name="firstname" id="firstname"><br>
         Last Name<br>
         <input type="text" name="lastname" id="lastname"><br>
-        ID Card<br>
-        <input type="text" name="idcard" id="idcard"><br>
-        Date of birth<br>
-        <input type="text" name="dateofbirth" id="dateofbirth"><br>
+        Student ID<br>
+        <input type="text" name="studentcard" id="studentcard"><br>
+        Faculty<br>
+        <input type="text" name="faculty" id="faculty"><br>
         <input type="submit">
     </form>
 
     <script>
-        const addIdCard = document.getElementById('addIdCard');
-        addIdCard.addEventListener('submit', idcards);
+        const addstudentcard = document.getElementById('addstudentcard')
+        addstudentcard.addEventListener('submit', addStudent)
 
-        async function idcards (event) {
-            event.preventDefault();
+        async function addStudent(event) {
+            event.preventDefault()
             const firstname = document.getElementById('firstname').value;
             const lastname = document.getElementById('lastname').value;
-            const idcard = document.getElementById('idcard').value;
-            const dateofbirth = document.getElementById('dateofbirth').value;
+            const studentcard = document.getElementById('studentcard').value;
+            const faculty = document.getElementById('faculty').value;
 
-            const result = await fetch('/api/addidcard', {
+            const result = await fetch('/api/addstudentcard',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -40,19 +38,19 @@
                 body: JSON.stringify({
                     firstname,
                     lastname,
-                    idcard,
-                    dateofbirth
+                    studentcard,
+                    faculty
                 })
             }).then((res) => res.json());
 
             if (result.status === 'ok') {
-                alert('success')
-                location.replace("/data")
+                alert("success")
+                location.replace('/data')
             } else {
-                alert(result.error)
+                alert(result.have)
             }
+
         }
     </script>
 </body>
-
 </html>
