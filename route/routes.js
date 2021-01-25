@@ -10,38 +10,45 @@ const idCard = require('../model/memberbyidcard');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const JWT_SECRET = 'asdfokoasdf48f43847/41*4832585f*8549fr3*12e*t5io96880/90789/5/67i77/68';
+const session = require('express-session');
+const CookieParser = require('cookie-parser')
 
-let currentToken;
+router.use(CookieParser())
+router.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+}))
 
-const ifNotLogin = (req, res, next) => {
-    if (!currentToken) {
-        next()
+const ifLoggedIn = (req, res, next) => {
+    if (req.session.username) {
+        return res.redirect('/main')
     } else {
-        res.redirect('/main')
+        next()
     }
 }
 
-const ifLogin = (req, res, next) => {
-    if (!currentToken) {
-        res.redirect('/')
+const ifNotLoggedIn = (req, res, next) => {
+    if (!req.session.username) {
+        return res.redirect('/')
     } else {
         next()
     }
 }
 
-router.get('/', ifNotLogin, async (req, res) => {
+router.get('/', ifLoggedIn, async (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'static', 'login.html'))
 })
 
-router.get('/main', ifLogin, async (req, res) => {
+router.get('/main', ifNotLoggedIn, async (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'static', 'main.html'))
 })
 
-router.get('/main/idcard', ifLogin, async (req, res) => {
+router.get('/main/idcard', ifNotLoggedIn, async (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'static', 'idCard.html'))
 })
 
-router.get('/main/student', ifLogin, async (req, res) => {
+router.get('/main/student', ifNotLoggedIn, async (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'static', 'student.html'))
 })
 
@@ -119,7 +126,9 @@ router.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
 
     const user = await admin.findOne({ username }).lean();
-
+    let sess = req.session
+    sess.username = user.username
+    sess._id = user._id
     if (!user) {
         return res.json({ status: "error", data: "invalid username or password" });
     }
@@ -132,7 +141,7 @@ router.post('/api/login', async (req, res) => {
             },
             JWT_SECRET
         )
-        currentToken = token
+
         return res.json({ status: "ok", token: token })
     }
 
@@ -140,7 +149,9 @@ router.post('/api/login', async (req, res) => {
 })
 
 router.post('/api/logout', (req, res) => {
-    currentToken = null;
+    let sess = req.session
+    sess.username = null
+    sess._id = null
     return res.json({ status: "ok" })
 })
 
