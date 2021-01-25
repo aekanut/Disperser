@@ -7,9 +7,7 @@ mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCrea
 const admin = require('../model/admin');
 const studentCard = require('../model/memberbystudentcard');
 const idCard = require('../model/memberbyidcard');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const JWT_SECRET = 'asdfokoasdf48f43847/41*4832585f*8549fr3*12e*t5io96880/90789/5/67i77/68';
 const session = require('express-session');
 const CookieParser = require('cookie-parser')
 
@@ -73,7 +71,7 @@ router.get('/api/allstudentcard', async (req, res) => {
 
 router.post('/api/addidcard', async (req, res) => {
     let { firstname, lastname, idcard, dateofbirth } = req.body;
-    console.log(firstname,lastname,idcard,dateofbirth)
+    
     try {
         const response = await idCard.create({
             firstname,
@@ -107,6 +105,57 @@ router.post('/api/addstudentcard', async (req, res) => {
     return res.json({ status: 'ok' })
 })
 
+router.post('/api/deletestudentcard', async (req, res) => {
+    let { studentcard } = req.body;
+
+    try {
+        await studentCard.deleteOne({ studentcard })
+    } catch (err) {
+        return res.json({ status: 'error', have: err })
+    }
+    return res.json({ status: 'ok' })
+})
+
+router.post('/api/deleteidcard', async (req, res) => {
+    let { idcard } = req.body;
+    
+    try {
+        await idCard.deleteOne({ idcard })
+        
+    } catch (err) {
+        return res.json({ status: 'error', have: err })
+    }
+    return res.json({ status: 'ok' })
+})
+
+router.put('/api/editstudentcard', async (req, res) => {
+    let { studentcard, update } = req.body;
+    try {
+        const user = await studentCard.findOneAndUpdate(
+            { studentcard },
+            update
+        )
+        console.log(user)
+        } catch (err) {
+        return res.json({ status: err })
+    }
+    return res.json({ status: 'ok' })
+})
+
+router.put('/api/editidcard', async (req, res) => {
+    let { idcard, update } = req.body;
+    try {
+        const user = await idCard.findOneAndUpdate(
+            { idcard },
+            update
+        )
+        console.log(user)
+        } catch (err) {
+        return res.json({ status: err })
+    }
+    return res.json({ status: 'ok' })
+})
+
 router.post('/api/register', async (req, res) => {
     const { username, password: pass } = req.body;
     const password = await bcrypt.hash(pass, 10);
@@ -134,15 +183,7 @@ router.post('/api/login', async (req, res) => {
     }
 
     if (await bcrypt.compare(password, user.password)) {
-        const token = jwt.sign(
-            {
-                id: user._id,
-                username: user.username
-            },
-            JWT_SECRET
-        )
-
-        return res.json({ status: "ok", token: token })
+        return res.json({ status: "ok" })
     }
 
     return res.json({ status: "error", data: 'invalid username or password' });
