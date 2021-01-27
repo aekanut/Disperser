@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style/datastyle.css">
+    <title>show member history</title>
+
+</head>
+
+<body>
+    <a href="/main">back to main</a><br><br>
+    ID Card
+    <div class="idCard"></div><br><br>
+    Student Card
+    <div class="studentCard"></div>
+
+    <script>
+        fetch('/api/allidcard').
+            then(res => res.json()).
+            then(data => {
+                let dataTable = `<table><thead><tr><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
+Registration Date</th></tr></thead><tbody>`
+                data.forEach(element => {
+                    dataTable += `<tr><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.idcard}</th><th>${element.dateofbirth}</th><th>${element.Date}</th></tr>`
+                });
+                dataTable += '</table></tbody>'
+                document.getElementsByClassName('idCard')[0].innerHTML = dataTable;
+            })
+
+        fetch('/api/allstudentcard').
+            then(res => res.json()).
+            then(data => {
+                let dataTable = `<table><thead><tr><th>First Name</th><th>Last Name</th><th>Student ID</th><th>Faculty</th><th>
+Registration Date</th></tr></thead><tbody>`
+                data.forEach(element => {
+                    dataTable += `<tr><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.studentcard}</th><th>${element.faculty}</th><th>${element.Date}</th></tr>`
+                });
+                dataTable += '</table></tbody>'
+                document.getElementsByClassName('studentCard')[0].innerHTML = dataTable;
+            })
+    </script>
+</body>
+
+</html>

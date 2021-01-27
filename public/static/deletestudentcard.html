@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Student Card</title>
+</head>
+<body>
+    Text Student card for delete member
+    <form id="deletess">
+        Student Card
+        <input type="text" name="studentcard" id="studentcard" placeholder="Student Card" pattern="[0-9]{8}" maxlength="8" minlength="8" required><br>
+        <input type="submit">
+    </form>
+    <br><br>
+    <a href="/main">back to main</a>
+    
+    <script>
+        const deletes = document.getElementById('deletess')
+        deletes.addEventListener('submit', deleteOne)
+
+        async function deleteOne(event) {
+            event.preventDefault();
+
+            const studentcard = document.getElementById('studentcard').value
+
+            const result = await fetch('/api/deletestudentcard',{
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    studentcard
+                })
+            }).then((res) => res.json())
+
+            if (result.status === 'ok') {
+                alert('success')
+                location.reload()
+            } else {
+                alert('change student card')
+            }
+        }
+    </script>
+</body>
+</html>

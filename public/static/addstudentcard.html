@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Student Card</title>
 </head>
+
 <body>
     <form id="addstudentcard">
         Add Student Card<br>
         First Name<br>
-        <input type="text" name="firstname" id="firstname"><br>
+        <input type="text" name="firstname" id="firstname" placeholder="First Name" required><br>
         Last Name<br>
-        <input type="text" name="lastname" id="lastname"><br>
+        <input type="text" name="lastname" id="lastname" placeholder="Last Name" required><br>
         Student ID<br>
-        <input type="text" name="studentcard" id="studentcard"><br>
+        <input type="text" name="studentcard" id="studentcard" placeholder="Student ID" maxlength="8" minlength="8" pattern="[0-9]{8}" required><br>
         Faculty<br>
-        <input type="text" name="faculty" id="faculty"><br>
+        <input type="text" name="faculty" id="faculty" placeholder="Faculty" required><br>
         <input type="submit">
     </form>
+    <br><br>
+    <a href="/main">back to main</a>
 
     <script>
         const addstudentcard = document.getElementById('addstudentcard')
@@ -30,7 +34,7 @@
             const studentcard = document.getElementById('studentcard').value;
             const faculty = document.getElementById('faculty').value;
 
-            const result = await fetch('/api/addstudentcard',{
+            const result = await fetch('/api/addstudentcard', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -45,12 +49,13 @@
 
             if (result.status === 'ok') {
                 alert("success")
-                location.replace('/main')
+                location.reload()
             } else {
-                alert(result.have)
+                alert(result.error.message)
             }
 
         }
     </script>
 </body>
+
 </html>

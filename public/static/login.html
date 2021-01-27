@@ -9,21 +9,16 @@
 </head>
 
 <body>
-    <div class="box">
-        <form id="login-form">
-            <h1>Login</h1><br>
-            <div class="text">
-                username<br><br>
-            </div>
-            <input type="text" name="username" id="username"><br><br>
-            <div class="text">
-                password<br><br>
-            </div>
-            <input type="password" name="password" id="password"><br><br>
-            <input type="submit" id="sub">
-        </form>
+
+    <div class="main">
+        <p class="sign" align="center">Sign in</p>
+        <form class="form1" id="login-form">
+            <input class="un " type="text" align="center" id="username" placeholder="Username">
+            <input class="pass" type="password" id="password" align="center" placeholder="Password"><br><br>
+            <input type="submit" class="submit" align="center" value="Sign in">
     </div>
-    </div>
+
+
 
     <script>
         const loginForm = document.getElementById('login-form');
@@ -46,7 +41,7 @@
             }).then((res) => res.json());
 
             if (result.status === 'ok') {
-                localStorage.setItem('token', result.token)
+
                 alert('success')
                 location.replace("/main")
             } else {

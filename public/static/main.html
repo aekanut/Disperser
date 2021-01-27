@@ -4,17 +4,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style/datastyle.css">
-    <title>show history</title>
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+            border: 0px;
+            background-color: rgb(151, 200, 240);
+            font-family: 'Ubuntu', sans-serif;
+        }
 
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .item {
+            background-color: #FFFFFF;
+            width: 600px;
+            height: 300px;
+            margin-bottom: 3.5%;
+            border-radius: 73px 73px 73px 73px;
+            -moz-border-radius: 73px 73px 73px 73px;
+            -webkit-border-radius: 73px 73px 73px 73px;
+            -webkit-box-shadow: 10px 10px 23px -11px rgba(0, 0, 0, 0.75);
+            -moz-box-shadow: 10px 10px 23px -11px rgba(0, 0, 0, 0.75);
+            box-shadow: 10px 10px 23px -11px rgba(0, 0, 0, 0.75);
+        }
+
+        .em {
+            margin-top: 2%;
+        }
+
+        .title {
+            padding-top: 45px;
+            padding-left: 240px;
+            padding-right: 240px;
+            font-size: 45px;
+            font-weight: bold;
+            color: #8C55AA;
+        }
+
+        .myButtonSky {
+            box-shadow: 0px 10px 14px -7px #4c9ca8;
+            background: linear-gradient(to left, #78ddff 5%, #6bc5d1 100%);
+            background-color: #78ddff;
+            border-radius: 8px;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Arial;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 13px 32px;
+            text-decoration: none;
+            text-shadow: 0px 1px 0px #62bfde;
+            transform: scale(1.15);
+        }
+
+        .myButtonSky:hover {
+            background: linear-gradient(to left, #6bc5d1 5%, #78ddff 100%);
+            background-color: #6bc5d1;
+        }
+
+        .myButtonSky:active {
+            position: relative;
+            top: 1px;
+        }
+
+        .myButtonBlue {
+            box-shadow: 0px 10px 14px -7px #a1b5ed;
+            background: linear-gradient(to left, #97b1de 5%, #4f7db5 100%);
+            background-color: #97b1de;
+            border-radius: 8px;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Arial;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 13px 32px;
+            text-decoration: none;
+            text-shadow: 0px 1px 0px #283966;
+            transform: scale(1.05);
+        }
+
+        .myButtonBlue:hover {
+            background: linear-gradient(to left, #4f7db5 5%, #97b1de 100%);
+            background-color: #4f7db5;
+        }
+
+        .myButtonBlue:active {
+            position: relative;
+            top: 1px;
+        }
+
+        .myButtonGreen {
+            box-shadow: 0px 10px 14px -7px #7ab85e;
+            background: linear-gradient(to left, #93c27c 5%, #5e9940 100%);
+            background-color: #93c27c;
+            border-radius: 8px;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Arial;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 13px 32px;
+            text-decoration: none;
+            text-shadow: 0px 1px 0px #487a27;
+            transform: scale(1.05);
+        }
+
+        .myButtonGreen:hover {
+            background: linear-gradient(to left, #5e9940 5%, #93c27c 100%);
+            background-color: #5e9940;
+        }
+
+        .myButtonGreen:active {
+            position: relative;
+            top: 1px;
+        }
+
+        .myButtonRed {
+            box-shadow: 0px 10px 14px -7px #8a2a21;
+            background: linear-gradient(to left, #f05b4d 5%, #bd291e 100%);
+            background-color: #f05b4d;
+            border-radius: 8px;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Arial;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 13px 32px;
+            text-decoration: none;
+            text-shadow: 0px 1px 0px #810e05;
+            transform: scale(1.05);
+        }
+
+        .myButtonRed:hover {
+            background: linear-gradient(to left, #bd291e 5%, #f05b4d 100%);
+            background-color: #bd291e;
+        }
+
+        .myButtonRed:active {
+            position: relative;
+            top: 1px;
+        }
+
+        .myButtonOut {
+            box-shadow: 0px 10px 14px -7px #f7f1f0;
+            background: linear-gradient(to left, #ccc9c9 5%, #a3a3a3 100%);
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            display: inline-block;
+            cursor: pointer;
+            color: #2a2b2c;
+            font-family: Arial;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 13px 32px;
+            text-decoration: none;
+            text-shadow: 0px 1px 0px #4b4949;
+            transform: scale(1.25);
+        }
+
+        .myButtonOut:hover {
+            background: linear-gradient(to left, #a3a3a3 5%, #ccc9c9 100%);
+            background-color: #e0e0e0;
+        }
+
+        .myButtonOut:active {
+            position: relative;
+            top: 1px;
+        }
+    </style>
 </head>
 
 <body>
-    <input type="button" value="Add ID Card" onclick="idCard()">
-    <input type="button" value="Add Student Card" onclick="studentCard()"><br>
-    <input type="button" value="logout" onclick="logout()">
-    <div class="idCard"></div><br><br>
-    <div class="studentCard"></div>
+    <div class="em"></div>
+    <div class="container">
+        <div class="item">
+            <div class="title">
+                Main
+            </div>
+            <br><br>
+            <div class="container">
+                <div class="myButtonSky" onclick="showAll()">Show all member</div>
+                <div class="myButtonSky">Search By ID</div>
+            </div><br><br>
+            <div class="container">
+                <div class="myButtonOut" onclick="logout()">Logout</div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="title">
+                Add
+            </div>
+            <br><br>
+            <div class="container">
+                <div class="myButtonGreen" onclick="idCard()">Add By ID Card</div>
+            </div><br><br>
+            <div class="container">
+                <div class="myButtonGreen" onclick="studentCard()">Add By Student Card</div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="item">
+            <div class="title">
+                Edit
+            </div>
+            <br><br>
+            <div class="container">
+                <div class="myButtonBlue">Edit By ID Card</div>
+            </div><br><br>
+            <div class="container">
+                <div class="myButtonBlue">Edit By Student Card</div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="title">
+                Delete
+            </div>
+            <br><br>
+            <div class="container">
+                <div class="myButtonRed" onclick="deleteIdCard()">Delete By ID Card</div>
+            </div><br><br>
+            <div class="container">
+                <div class="myButtonRed" onclick="deleteStudentCard()">Delete By Student Card</div>
+            </div>
+        </div>
+    </div>
 
     <script>
         const logout = async () => {
@@ -23,10 +246,14 @@
             }).then((res) => res.json());
 
             if (result.status === 'ok') {
-                localStorage.removeItem('token');
+
                 location.replace('/')
             }
 
+        }
+
+        const showAll = () => {
+            location.replace("/main/showall")
         }
 
         const idCard = () => {
@@ -37,30 +264,13 @@
             location.replace("/main/student")
         }
 
-        fetch('/api/allidcard').
-            then(res => res.json()).
-            then(data => {
-                let dataTable = `<table><tr><th>Member ID</th><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
-Registration Date</th></tr>`
-                data.forEach(element => {
-                    dataTable += `<tr><th>${element._id}</th><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.idcard}</th><th>${element.dateofbirth}</th><th>${element.Date}</th></tr>`
-                });
-                dataTable += '</table>'
-                document.getElementsByClassName('idCard')[0].innerHTML = dataTable;
-            })
+        const deleteIdCard = () => {
+            location.replace('/main/deleteidcard')
+        }
 
-        fetch('/api/allstudentcard').
-            then(res => res.json()).
-            then(data => {
-                let dataTable = `<table><tr><th>Member ID</th><th>First Name</th><th>Last Name</th><th>Student ID</th><th>Faculty</th><th>
-Registration Date</th></tr>`
-                data.forEach(element => {
-                    dataTable += `<tr><th>${element._id}</th><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.studentcard}</th><th>${element.faculty}</th><th>${element.Date}</th></tr>`
-                });
-                dataTable += '</table>'
-                document.getElementsByClassName('studentCard')[0].innerHTML = dataTable;
-            })
-
+        const deleteStudentCard = () => {
+            location.replace('/main/deletestudentcard')
+        }
 
     </script>
 </body>

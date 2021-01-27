@@ -17,6 +17,7 @@ router.use(session({
 }))
 
 const ifLoggedIn = (req, res, next) => {
+    console.log(req.session)
     if (req.session.username) {
         return res.redirect('/main')
     } else {
@@ -25,6 +26,7 @@ const ifLoggedIn = (req, res, next) => {
 }
 
 const ifNotLoggedIn = (req, res, next) => {
+    console.log(req.session)
     if (!req.session.username) {
         return res.redirect('/')
     } else {
@@ -41,11 +43,23 @@ router.get('/main', ifNotLoggedIn, async (req, res) => {
 })
 
 router.get('/main/idcard', ifNotLoggedIn, async (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'idCard.html'))
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'addidcard.html'))
 })
 
 router.get('/main/student', ifNotLoggedIn, async (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'student.html'))
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'addstudentcard.html'))
+})
+
+router.get('/main/deleteidcard', ifNotLoggedIn, async (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'deleteidcard.html'))
+})
+
+router.get('/main/deletestudentcard', ifNotLoggedIn, async (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'deletestudentcard.html'))
+})
+
+router.get('/main/showall', ifNotLoggedIn, async (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'showall.html'))
 })
 
 router.post('/api/register', async (req, res) => {

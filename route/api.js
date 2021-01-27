@@ -27,36 +27,39 @@ router.get('/allstudentcard', async (req, res) => {
 
 router.post('/addidcard', async (req, res) => {
     let { firstname, lastname, idcard, dateofbirth } = req.body;
-    
+    const DATE = new Date();
+    let date = `Date: ${DATE.getDate()}-${DATE.getMonth()+1}-${DATE.getFullYear()} Time: ${DATE.getHours()}:${DATE.getMinutes()}:${DATE.getSeconds()}`
     try {
         const response = await idCard.create({
             firstname,
             lastname,
             idcard,
             dateofbirth,
-            Date: new Date()
+            Date: date
         })
         
     } catch (err) {
-        return res.json({ status: 'error', have: err })
+        console.log(err.error)
+        return res.json({ status: 'error', error: err })
     }
     return res.json({ status: 'ok' })
 })
 
 router.post('/addstudentcard', async (req, res) => {
     let { firstname, lastname, studentcard, faculty } = req.body;
-
+    const DATE = new Date();
+    let date = `Date: ${DATE.getDate()}-${DATE.getMonth()+1}-${DATE.getFullYear()} Time: ${DATE.getHours()}:${DATE.getMinutes()}:${DATE.getSeconds()}`
     try {
         const response = await studentCard.create({
             firstname,
             lastname,
             studentcard,
             faculty,
-            Date: new Date()
+            Date: date
         })
         
     } catch (err) {
-        return res.json({ status: 'error', have: err })
+        return res.json({ status: 'error', error: err })
     }
     return res.json({ status: 'ok' })
 })
@@ -67,7 +70,7 @@ router.post('/deletestudentcard', async (req, res) => {
     try {
         await studentCard.deleteOne({ studentcard })
     } catch (err) {
-        return res.json({ status: 'error', have: err })
+        return res.json({ status: 'error', error: err })
     }
     return res.json({ status: 'ok' })
 })
@@ -76,10 +79,13 @@ router.post('/deleteidcard', async (req, res) => {
     let { idcard } = req.body;
     
     try {
-        await idCard.deleteOne({ idcard })
-        
+        const user = await idCard.deleteOne({ idcard })
+        console.log(user)
+        if (!user.n){
+            return res.json({ status: 'error'})
+        }
     } catch (err) {
-        return res.json({ status: 'error', have: err })
+        return res.json({ status: 'error', error: err })
     }
     return res.json({ status: 'ok' })
 })
@@ -93,7 +99,7 @@ router.put('/editstudentcard', async (req, res) => {
         )
         console.log(user)
         } catch (err) {
-        return res.json({ status: err })
+        return res.json({ status: "error", error: err })
     }
     return res.json({ status: 'ok' })
 })
@@ -107,7 +113,7 @@ router.put('/editidcard', async (req, res) => {
         )
         console.log(user)
         } catch (err) {
-        return res.json({ status: err })
+        return res.json({ status: "error", error: err })
     }
     return res.json({ status: 'ok' })
 })

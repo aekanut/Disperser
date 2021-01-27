@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete ID Card</title>
+</head>
+<body>
+    Text ID card for delete member
+    <form id="deletess">
+        ID Card
+        <input type="text" name="idcard" id="idcard" placeholder="ID Card" pattern="[0-9]{13}" maxlength="13" minlength="13" required><br>
+        <input type="submit">
+    </form>
+    <br><br>
+    <a href="/main">back to main</a>
+    
+    <script>
+        const deletes = document.getElementById('deletess')
+        deletes.addEventListener('submit', deleteOne)
+
+        async function deleteOne(event) {
+            event.preventDefault();
+
+            const idcard = document.getElementById('idcard').value
+
+            const result = await fetch('/api/deleteidcard',{
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    idcard
+                })
+            }).then((res) => res.json())
+
+            if (result.status === 'ok') {
+                alert('success')
+                location.reload()
+            } else {
+                alert('change id card')
+            }
+        }
+    </script>
+</body>
+</html>
