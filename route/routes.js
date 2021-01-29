@@ -50,6 +50,10 @@ router.get('/main/student', ifNotLoggedIn, async (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'static', 'addstudentcard.html'))
 })
 
+router.get('/main/editidcard', ifNotLoggedIn, async (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'editidcard.html'))
+})
+
 router.get('/main/deleteidcard', ifNotLoggedIn, async (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'static', 'deleteidcard.html'))
 })

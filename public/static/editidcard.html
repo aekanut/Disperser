@@ -1,23 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: rgb(151, 200, 240);
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        table {
+            width: 100%
+        }
+
+        th {
+            width: 16.67%;
+        }
+
+        thead {
+            background: #666;
+            color: #fff;
+        }
+
+        td {
+            padding: 5px;
+        }
+
+        tbody {
+            background: #e8ebf1;
+            color: black;
+        }
+
+
+        .myButtonGreen {
+            box-shadow: 0px 10px 14px -7px #7ab85e;
+            background: linear-gradient(to left, #93c27c 5%, #5e9940 100%);
+            background-color: #93c27c;
+            border-radius: 8px;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Arial;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 13px 32px;
+            text-decoration: none;
+            text-shadow: 0px 1px 0px #487a27;
+            transform: scale(0.7);
+        }
+
+        .myButtonGreen:hover {
+            background: linear-gradient(to left, #5e9940 5%, #93c27c 100%);
+            background-color: #5e9940;
+        }
+
+        .myButtonGreen:active {
+            position: relative;
+            top: 1px;
+        }
+
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
     <title>Edit ID Card</title>
 </head>
+
 <body>
-    <h1>Edit ID Card</h1><br>
-    <form id="editidcard">
-        First Name<br>
-        <input type="text" name="firstname" id="firstname" placeholder="First Name" required><br>
-        Last Name<br>
-        <input type="text" name="lastname" id="lastname" placeholder="Last Name" required><br>
-        ID Card<br>
-        <input type="text" name="idcard" id="idcard" placeholder="ID Card" maxlength="13" minlength="13" pattern="[0-9]{13}" required><br>
-        Date of birth<br>
-        <input type="date" name="dateofbirth" id="dateofbirth" required><br>
-        <input type="submit">
-        <br><br>
-    </form>
+    <a href="/main">back to main</a><br><br>
+    ID Card
+    <div class="idCard"></div><br><br>
+
+    <script>
+
+        fetch('/api/allidcard').
+            then(res => res.json()).
+            then(data => {
+                let dataTable = `<table><thead><tr><th>Click Green button for edit</th><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
+Registration Date</th></tr></thead><tbody>`
+                data.forEach(element => {
+                    dataTable += `<tr name="${element.idcard}"><th><div class="myButtonGreen" id="${element.idcard}" onclick="editIdCard(this.id)">Click for edit</div></th><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.idcard}</th><th>${element.dateofbirth}</th><th>${element.Date}</th></tr>`
+                });
+                dataTable += '</table></tbody>'
+                document.getElementsByClassName('idCard')[0].innerHTML = dataTable;
+            })
+
+        const editIdCard = (idCard) => {
+            const oldText = (column) => {
+                return document.getElementsByName(idCard)[0]["children"][column]["outerText"]
+            } 
+
+            document.getElementsByName(idCard)[0].innerHTML =
+                `<tr name="${oldText(3)}">
+                <th>
+                    <div class="myButtonGreen" id="${oldText(3)}" onclick="saveIdCards(this.id)">
+                        Click for edit
+                    </div>
+                </th>
+                <th>
+                    <input type="text" value="${oldText(1)}">
+                </th>
+                <th>
+                    <input type="text" value="${oldText(2)}">
+                </th>
+                <th>
+                    ${oldText(3)}
+                </th>
+                <th>
+                    <input type="text" value="${oldText(4)}">
+                </th>
+                <th>
+                    ${oldText(5)}
+                </th>
+            </tr>`
+        }
+
+        async function saveIdCards(idCard) {
+
+            const result = await fetch('/api/oneidcard', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    idcard: idCard
+                })
+            }).then((res) => res.json())
+
+            document.getElementsByName(idCard)[0].innerHTML =
+                `<tr name="${result["0"]["idcard"]}">
+                <th>
+                    <div class="myButtonGreen" id="${result["0"]["idcard"]}" onclick="editIdCard(this.id)">
+                        Click for save
+                    </div>
+                </th>
+                <th>
+                    ${result["0"]["firstname"]}
+                </th>
+                <th>
+                    ${result["0"]["lastname"]}
+                </th>
+                <th>
+                    ${result["0"]["idcard"]}
+                </th>
+                <th>
+                    ${result["0"]["dateofbirth"]}
+                </th>
+                <th>
+                    ${result["0"]["Date"]}
+                </th>
+            </tr>`
+        }
+
+    </script>
 </body>
+
 </html>

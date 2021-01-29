@@ -25,10 +25,28 @@ router.get('/allstudentcard', async (req, res) => {
     }
 })
 
+router.post('/oneidcard', async (req, res) => {
+    try {
+        let { idcard } = req.body;
+        console.log(idcard)
+        const thisIdCard = await idCard.find({idcard}).sort('_id')
+        console.log(thisIdCard)
+        return res.json(thisIdCard)
+    } catch (err) {
+        return res.json({status: 'error'})
+    }
+})
+
 router.post('/addidcard', async (req, res) => {
     let { firstname, lastname, idcard, dateofbirth } = req.body;
     const DATE = new Date();
-    let date = `Date: ${DATE.getDate()}-${DATE.getMonth()+1}-${DATE.getFullYear()} Time: ${DATE.getHours()}:${DATE.getMinutes()}:${DATE.getSeconds()}`
+    let sec; 
+    if (DATE.getSeconds() < 10) {
+        sec = 0 + DATE.getSeconds().toString()
+    } else {
+        sec = DATE.getSeconds()
+    }
+    let date = `Date: ${DATE.getDate()}-${DATE.getMonth()+1}-${DATE.getFullYear()} Time: ${DATE.getHours()}:${DATE.getMinutes()}:${sec}`
     try {
         const response = await idCard.create({
             firstname,
@@ -48,7 +66,13 @@ router.post('/addidcard', async (req, res) => {
 router.post('/addstudentcard', async (req, res) => {
     let { firstname, lastname, studentcard, faculty } = req.body;
     const DATE = new Date();
-    let date = `Date: ${DATE.getDate()}-${DATE.getMonth()+1}-${DATE.getFullYear()} Time: ${DATE.getHours()}:${DATE.getMinutes()}:${DATE.getSeconds()}`
+    let sec;
+    if (DATE.getSeconds() < 10) {
+        let sec = 0 + DATE.getSeconds().toString()
+    } else {
+        let sec = DATE.getSeconds()
+    }
+    let date = `Date: ${DATE.getDate()}-${DATE.getMonth()+1}-${DATE.getFullYear()} Time: ${DATE.getHours()}:${DATE.getMinutes()}:${sec}`
     try {
         const response = await studentCard.create({
             firstname,

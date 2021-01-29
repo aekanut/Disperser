@@ -219,7 +219,7 @@
             </div>
             <br><br>
             <div class="container">
-                <div class="myButtonBlue">Edit By ID Card</div>
+                <div class="myButtonBlue" onclick="editIdCard()">Edit By ID Card</div>
             </div><br><br>
             <div class="container">
                 <div class="myButtonBlue">Edit By Student Card</div>
@@ -262,6 +262,10 @@
 
         const studentCard = () => {
             location.replace("/main/student")
+        }
+
+        const editIdCard = () => {
+            location.replace("/main/editidcard")
         }
 
         const deleteIdCard = () => {
