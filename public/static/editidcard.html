@@ -122,36 +122,60 @@
             then(data => {
                 let dataTable = `<table><thead><tr><th>Click Green button for edit</th><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
 Registration Date</th></tr></thead><tbody>`
+                let i=0;
                 data.forEach(element => {
-                    dataTable += `<tr name="${element.idcard}"><th><div class="myButtonGreen" id="${element.idcard}" onclick="editIdCard(this.id)">Click for edit</div></th><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.idcard}</th><th>${element.dateofbirth}</th><th>${element.Date}</th></tr>`
+                    dataTable += `<tr name="${element.idcard}">
+                                    <th>
+                                        <div class="myButtonGreen" id="${i++}" onclick="editIdCard(this.id)">
+                                            Click for edit
+                                        </div>
+                                    </th>
+                                    <th>
+                                        ${element.firstname}
+                                    </th>
+                                    <th>
+                                        ${element.lastname}
+                                    </th>
+                                    <th>
+                                        ${element.idcard}
+                                    </th>
+                                    <th>
+                                        ${element.dateofbirth}
+                                    </th>
+                                    <th>
+                                        ${element.Date}
+                                    </th>
+                                </tr>`
                 });
                 dataTable += '</table></tbody>'
                 document.getElementsByClassName('idCard')[0].innerHTML = dataTable;
             })
 
-        const editIdCard = (idCard) => {
+        const editIdCard = (index) => {
+            const idCard = document.getElementById(index).parentNode.parentNode.children[3].outerText
+            
             const oldText = (column) => {
-                return document.getElementsByName(idCard)[0]["children"][column]["outerText"]
+                return document.getElementsByName(idCard)[0].children[column].outerText
             } 
 
             document.getElementsByName(idCard)[0].innerHTML =
                 `<tr name="${oldText(3)}">
                 <th>
-                    <div class="myButtonGreen" id="${oldText(3)}" onclick="saveIdCards(this.id)">
-                        Click for edit
+                    <div class="myButtonGreen" id="${index}" onclick="saveIdCards(this.id)">
+                        Click for save
                     </div>
                 </th>
                 <th>
-                    <input type="text" value="${oldText(1)}">
+                    <input type="text" id="${"firstname" + oldText(3)}" value="${oldText(1)}">
                 </th>
                 <th>
-                    <input type="text" value="${oldText(2)}">
+                    <input type="text" id="${"lastname" + oldText(3)}" value="${oldText(2)}">
                 </th>
                 <th>
                     ${oldText(3)}
                 </th>
                 <th>
-                    <input type="text" value="${oldText(4)}">
+                    ${oldText(4)}
                 </th>
                 <th>
                     ${oldText(5)}
@@ -159,41 +183,58 @@ Registration Date</th></tr></thead><tbody>`
             </tr>`
         }
 
-        async function saveIdCards(idCard) {
+        async function saveIdCards(index) {
+            const idCard = document.getElementById(index).parentNode.parentNode.children[3].outerText
+            
+            const oldText = (column) => {
+                return document.getElementsByName(idCard)[0].children[column].outerText
+            } 
 
-            const result = await fetch('/api/oneidcard', {
-                method: 'POST',
+            const firstname = document.getElementById("firstname" + idCard).value;
+            const lastname = document.getElementById("lastname" + idCard).value;
+
+            const result = await fetch('/api/editidcard', {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    idcard: idCard
+                    idcard: idCard,
+                    update: {
+                        firstname: firstname,
+                        lastname: lastname
+                    }
                 })
             }).then((res) => res.json())
 
-            document.getElementsByName(idCard)[0].innerHTML =
-                `<tr name="${result["0"]["idcard"]}">
-                <th>
-                    <div class="myButtonGreen" id="${result["0"]["idcard"]}" onclick="editIdCard(this.id)">
-                        Click for save
-                    </div>
-                </th>
-                <th>
-                    ${result["0"]["firstname"]}
-                </th>
-                <th>
-                    ${result["0"]["lastname"]}
-                </th>
-                <th>
-                    ${result["0"]["idcard"]}
-                </th>
-                <th>
-                    ${result["0"]["dateofbirth"]}
-                </th>
-                <th>
-                    ${result["0"]["Date"]}
-                </th>
-            </tr>`
+            if (result.status === "ok") {
+                alert('success')
+                document.getElementsByName(idCard)[0].innerHTML =
+                `<tr name="${oldText(3)}">
+                    <th>
+                        <div class="myButtonGreen" id="${index}" onclick="editIdCard(this.id)">
+                            Click for edit
+                        </div>
+                    </th>
+                    <th>
+                        ${firstname}
+                    </th>
+                    <th>
+                        ${lastname}
+                    </th>
+                    <th>
+                        ${oldText(3)}
+                    </th>
+                    <th>
+                        ${oldText(4)}
+                    </th>
+                    <th>
+                        ${oldText(5)}
+                    </th>
+                </tr>` 
+            } else {
+                alert(result.error)
+            }
         }
 
     </script>

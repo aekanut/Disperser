@@ -135,11 +135,11 @@ router.put('/editidcard', async (req, res) => {
             { idcard },
             update
         )
-        console.log(user)
+        return res.json({ status: 'ok', data: user })
+        
         } catch (err) {
         return res.json({ status: "error", error: err })
     }
-    return res.json({ status: 'ok' })
 })
 
 module.exports = router;
