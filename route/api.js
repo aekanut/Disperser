@@ -5,8 +5,26 @@ const URI = 'mongodb://localhost:27017/dispense';
 mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 const studentCard = require('../model/memberbystudentcard');
 const idCard = require('../model/memberbyidcard');
+const session = require('express-session');
+const CookieParser = require('cookie-parser')
 
-router.get('/allidcard', async (req, res) => {
+router.use(CookieParser())
+router.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+}))
+
+const ifNotLoggedIn = (req, res, next) => {
+    if (!req.session.username) {
+        res.status(401);
+        return res.send("Don't hack please")
+    } else {
+        next()
+    }
+}
+
+router.get('/allidcard', ifNotLoggedIn, async (req, res) => {
     try {
         const allIdCard = await idCard.find({}).sort('_id')
         return res.json(allIdCard)
@@ -15,17 +33,16 @@ router.get('/allidcard', async (req, res) => {
     }
 })
 
-router.get('/allstudentcard', async (req, res) => {
+router.get('/allstudentcard', ifNotLoggedIn, async (req, res) => {
     try {
         const allIdCard = await studentCard.find({})
-        
         return res.json(allIdCard)
     } catch (err) {
         return res.json({status: 'error'})
     }
 })
 
-router.post('/oneidcard', async (req, res) => {
+router.post('/oneidcard', ifNotLoggedIn, async (req, res) => {
     try {
         let { idcard } = req.body;
         console.log(idcard)
@@ -37,7 +54,7 @@ router.post('/oneidcard', async (req, res) => {
     }
 })
 
-router.post('/addidcard', async (req, res) => {
+router.post('/addidcard', ifNotLoggedIn, async (req, res) => {
     let { firstname, lastname, idcard, dateofbirth } = req.body;
     const DATE = new Date();
     let sec; 
@@ -63,7 +80,7 @@ router.post('/addidcard', async (req, res) => {
     return res.json({ status: 'ok' })
 })
 
-router.post('/addstudentcard', async (req, res) => {
+router.post('/addstudentcard', ifNotLoggedIn, async (req, res) => {
     let { firstname, lastname, studentcard, faculty } = req.body;
     const DATE = new Date();
     let sec;
@@ -88,7 +105,7 @@ router.post('/addstudentcard', async (req, res) => {
     return res.json({ status: 'ok' })
 })
 
-router.post('/deletestudentcard', async (req, res) => {
+router.post('/deletestudentcard', ifNotLoggedIn, async (req, res) => {
     let { studentcard } = req.body;
 
     try {
@@ -99,7 +116,7 @@ router.post('/deletestudentcard', async (req, res) => {
     return res.json({ status: 'ok' })
 })
 
-router.post('/deleteidcard', async (req, res) => {
+router.post('/deleteidcard', ifNotLoggedIn, async (req, res) => {
     let { idcard } = req.body;
     
     try {
@@ -114,7 +131,7 @@ router.post('/deleteidcard', async (req, res) => {
     return res.json({ status: 'ok' })
 })
 
-router.put('/editstudentcard', async (req, res) => {
+router.put('/editstudentcard', ifNotLoggedIn, async (req, res) => {
     let { studentcard, update } = req.body;
     try {
         const user = await studentCard.findOneAndUpdate(
@@ -122,13 +139,14 @@ router.put('/editstudentcard', async (req, res) => {
             update
         )
         console.log(user)
+        return res.json({ status: 'ok', data: user })
         } catch (err) {
         return res.json({ status: "error", error: err })
     }
-    return res.json({ status: 'ok' })
+    
 })
 
-router.put('/editidcard', async (req, res) => {
+router.put('/editidcard', ifNotLoggedIn, async (req, res) => {
     let { idcard, update } = req.body;
     try {
         const user = await idCard.findOneAndUpdate(

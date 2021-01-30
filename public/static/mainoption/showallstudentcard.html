@@ -11,25 +11,13 @@
 
 <body>
     <a href="/main">back to main</a><br><br>
-    ID Card
-    <div class="idCard"></div><br><br>
     Student Card
     <div class="studentCard"></div>
 
     <script>
-        fetch('/api/allidcard').
-            then(res => res.json()).
-            then(data => {
-                let dataTable = `<table><thead><tr><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
-Registration Date</th></tr></thead><tbody>`
-                data.forEach(element => {
-                    dataTable += `<tr><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.idcard}</th><th>${element.dateofbirth}</th><th>${element.Date}</th></tr>`
-                });
-                dataTable += '</table></tbody>'
-                document.getElementsByClassName('idCard')[0].innerHTML = dataTable;
-            })
-
-        fetch('/api/allstudentcard').
+        fetch('/api/allstudentcard', {
+            method: 'GET'
+        }).
             then(res => res.json()).
             then(data => {
                 let dataTable = `<table><thead><tr><th>First Name</th><th>Last Name</th><th>Student ID</th><th>Faculty</th><th>

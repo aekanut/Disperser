@@ -1,11 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const mongoose = require('mongoose');
-const URI = 'mongodb://localhost:27017/dispense';
-mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
-const admin = require('../model/admin');
-const bcrypt = require('bcrypt');
 const session = require('express-session');
 const CookieParser = require('cookie-parser')
 
@@ -43,67 +38,35 @@ router.get('/main', ifNotLoggedIn, async (req, res) => {
 })
 
 router.get('/main/idcard', ifNotLoggedIn, async (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'addidcard.html'))
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'add', 'addidcard.html'))
 })
 
 router.get('/main/student', ifNotLoggedIn, async (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'addstudentcard.html'))
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'add', 'addstudentcard.html'))
 })
 
 router.get('/main/editidcard', ifNotLoggedIn, async (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'editidcard.html'))
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'edit', 'editidcard.html'))
+})
+
+router.get('/main/editstudentcard', ifNotLoggedIn, async (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'edit', 'editstudent.html'))
 })
 
 router.get('/main/deleteidcard', ifNotLoggedIn, async (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'deleteidcard.html'))
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'delete', 'deleteidcard.html'))
 })
 
 router.get('/main/deletestudentcard', ifNotLoggedIn, async (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'deletestudentcard.html'))
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'delete', 'deletestudentcard.html'))
 })
 
-router.get('/main/showall', ifNotLoggedIn, async (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'showall.html'))
+router.get('/main/showallidcard', ifNotLoggedIn, async (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'mainoption', 'showallidcard.html'))
 })
 
-router.post('/api/register', async (req, res) => {
-    const { username, password: pass } = req.body;
-    const password = await bcrypt.hash(pass, 10);
-    try {
-        const response = await admin.create({
-            username,
-            password
-        })
-        console.log('success :', response);
-    } catch (err) {
-        res.json({ status: 'error' });
-    }
-    res.json({ status: 'ok' });
-})
-
-router.post('/api/login', async (req, res) => {
-    const { username, password } = req.body;
-
-    const user = await admin.findOne({ username }).lean();
-    let sess = req.session
-    sess.username = user.username
-    sess._id = user._id
-    if (!user) {
-        return res.json({ status: "error", data: "invalid username or password" });
-    }
-
-    if (await bcrypt.compare(password, user.password)) {
-        return res.json({ status: "ok" })
-    }
-
-    return res.json({ status: "error", data: 'invalid username or password' });
-})
-
-router.post('/api/logout', (req, res) => {
-    let sess = req.session
-    sess.username = null
-    sess._id = null
-    return res.json({ status: "ok" })
+router.get('/main/showallstudentcard', ifNotLoggedIn, async (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'mainoption', 'showallstudentcard.html'))
 })
 
 module.exports = router;

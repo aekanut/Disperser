@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: rgb(151, 200, 240);
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        table {
+            width: 100%
+        }
+
+        th {
+            width: 16.67%;
+        }
+
+        thead {
+            background: #666;
+            color: #fff;
+        }
+
+        td {
+            padding: 5px;
+        }
+
+        tbody {
+            background: #e8ebf1;
+            color: black;
+        }
+
+
+        .myButtonGreen {
+            box-shadow: 0px 10px 14px -7px #7ab85e;
+            background: linear-gradient(to left, #93c27c 5%, #5e9940 100%);
+            background-color: #93c27c;
+            border-radius: 8px;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Arial;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 13px 32px;
+            text-decoration: none;
+            text-shadow: 0px 1px 0px #487a27;
+            transform: scale(0.7);
+        }
+
+        .myButtonGreen:hover {
+            background: linear-gradient(to left, #5e9940 5%, #93c27c 100%);
+            background-color: #5e9940;
+        }
+
+        .myButtonGreen:active {
+            position: relative;
+            top: 1px;
+        }
+
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+    <title>Edit Student Card</title>
+</head>
+
+<body>
+    <a href="/main">back to main</a><br><br>
+    Student Card
+    <div class="studentCard"></div><br><br>
+
+    <script>
+
+        fetch('/api/allstudentcard').
+            then(res => res.json()).
+            then(data => {
+                let dataTable = `<table><thead><tr><th>Click Green button for edit</th><th>First Name</th><th>Last Name</th><th>Student Card</th><th>Faculty</th><th>
+Registration Date</th></tr></thead><tbody>`
+                let i=0;
+                data.forEach(element => {
+                    dataTable += `<tr name="${element.studentcard}">
+                                    <th>
+                                        <div class="myButtonGreen" id="${i++}" onclick="editStudentCard(this.id)">
+                                            Click for edit
+                                        </div>
+                                    </th>
+                                    <th>
+                                        ${element.firstname}
+                                    </th>
+                                    <th>
+                                        ${element.lastname}
+                                    </th>
+                                    <th>
+                                        ${element.studentcard}
+                                    </th>
+                                    <th>
+                                        ${element.faculty}
+                                    </th>
+                                    <th>
+                                        ${element.Date}
+                                    </th>
+                                </tr>`
+                });
+                dataTable += '</table></tbody>'
+                document.getElementsByClassName('studentCard')[0].innerHTML = dataTable;
+            })
+
+        const editStudentCard = (index) => {
+            const studentCard = document.getElementById(index).parentNode.parentNode.children[3].outerText
+            
+            const oldText = (column) => {
+                return document.getElementsByName(studentCard)[0].children[column].outerText
+            } 
+
+            document.getElementsByName(studentCard)[0].innerHTML =
+                `<tr name="${oldText(3)}">
+                <th>
+                    <div class="myButtonGreen" id="${index}" onclick="saveStudentCards(this.id)">
+                        Click for save
+                    </div>
+                </th>
+                <th>
+                    <input type="text" id="${"firstname" + oldText(3)}" value="${oldText(1)}">
+                </th>
+                <th>
+                    <input type="text" id="${"lastname" + oldText(3)}" value="${oldText(2)}">
+                </th>
+                <th>
+                    ${oldText(3)}
+                </th>
+                <th>
+                    ${oldText(4)}
+                </th>
+                <th>
+                    ${oldText(5)}
+                </th>
+            </tr>`
+        }
+
+        async function saveStudentCards(index) {
+            const studentCard = document.getElementById(index).parentNode.parentNode.children[3].outerText
+            
+            const oldText = (column) => {
+                return document.getElementsByName(studentCard)[0].children[column].outerText
+            } 
+
+            const firstname = document.getElementById("firstname" + studentCard).value;
+            const lastname = document.getElementById("lastname" + studentCard).value;
+
+            const result = await fetch('/api/editstudentcard', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    studentcard: studentCard,
+                    update: {
+                        firstname: firstname,
+                        lastname: lastname
+                    }
+                })
+            }).then((res) => res.json())
+
+            if (result.status === "ok") {
+                alert('success')
+                document.getElementsByName(studentCard)[0].innerHTML =
+                `<tr name="${oldText(3)}">
+                    <th>
+                        <div class="myButtonGreen" id="${index}" onclick="editStudentCard(this.id)">
+                            Click for edit
+                        </div>
+                    </th>
+                    <th>
+                        ${firstname}
+                    </th>
+                    <th>
+                        ${lastname}
+                    </th>
+                    <th>
+                        ${oldText(3)}
+                    </th>
+                    <th>
+                        ${oldText(4)}
+                    </th>
+                    <th>
+                        ${oldText(5)}
+                    </th>
+                </tr>` 
+            } else {
+                alert(result.error)
+            }
+        }
+
+    </script>
+</body>
+
+</html>
