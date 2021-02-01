@@ -11,7 +11,20 @@
 
 <body>
     <a href="/main">back to main</a><br><br>
+    <form id="searchidcard">
+        <input type="search" id="search" placeholder="Search By Student Card"><input id="myBtn" type="button" value="submit"><br>
+    </form>
     Student Card
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="searchdata"></p>
+        </div>
+
+    </div>
     <div class="studentCard"></div>
 
     <script>
@@ -23,11 +36,43 @@
                 let dataTable = `<table><thead><tr><th>First Name</th><th>Last Name</th><th>Student ID</th><th>Faculty</th><th>
 Registration Date</th></tr></thead><tbody>`
                 data.forEach(element => {
-                    dataTable += `<tr><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.studentcard}</th><th>${element.faculty}</th><th>${element.Date}</th></tr>`
+                    dataTable += `<tr name='${element.studentcard}'><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.studentcard}</th><th>${element.faculty}</th><th>${element.Date}</th></tr>`
                 });
                 dataTable += '</table></tbody>'
                 document.getElementsByClassName('studentCard')[0].innerHTML = dataTable;
             })
+
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function () {
+            const studentCard = document.getElementById('search').value;
+            const oldText = (column) => {
+                return document.getElementsByName(studentCard)[0].children[column].outerText
+            } 
+            const newData = oldText(0) + '\n' + oldText(1) + '\n' + oldText(2) + '\n' + oldText(3) + '\n' + oldText(4)
+            document.getElementById('searchdata').innerHTML = newData;
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     </script>
 </body>
 

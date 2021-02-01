@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add ID Card</title>
+    <style>
+        body {
+            background-color: rgb(151, 200, 240);
+            font-family: 'Ubuntu', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
@@ -15,45 +21,46 @@
         Last Name<br>
         <input type="text" name="lastname" id="lastname" placeholder="Last Name" required><br>
         ID Card<br>
-        <input type="text" name="idcard" id="idcard" placeholder="ID Card" maxlength="13" minlength="13" pattern="[0-9]{13}" required><br>
+        <input type="text" name="idcard" id="idcard" placeholder="ID Card" maxlength="13" minlength="13"
+            pattern="[0-9]{13}" required><br>
         Date of birth<br>
         <input type="date" name="dateofbirth" id="dateofbirth" required><br>
         <input type="submit">
         <br><br>
-    <a href="/main">back to main</a>
+        <a href="/main">back to main</a>
 
-    <script>
-        const addIdCard = document.getElementById('addIdCard');
-        addIdCard.addEventListener('submit', idcards);
+        <script>
+            const addIdCard = document.getElementById('addIdCard');
+            addIdCard.addEventListener('submit', idcards);
 
-        async function idcards (event) {
-            event.preventDefault();
-            const firstname = document.getElementById('firstname').value;
-            const lastname = document.getElementById('lastname').value;
-            const idcard = document.getElementById('idcard').value;
-            const dateofbirth = document.getElementById('dateofbirth').value;
+            async function idcards(event) {
+                event.preventDefault();
+                const firstname = document.getElementById('firstname').value;
+                const lastname = document.getElementById('lastname').value;
+                const idcard = document.getElementById('idcard').value;
+                const dateofbirth = document.getElementById('dateofbirth').value;
 
-            const result = await fetch('/api/addidcard', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    firstname,
-                    lastname,
-                    idcard,
-                    dateofbirth
-                })
-            }).then((res) => res.json());
+                const result = await fetch('/api/addidcard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        firstname,
+                        lastname,
+                        idcard,
+                        dateofbirth
+                    })
+                }).then((res) => res.json());
 
-            if (result.status === 'ok') {
-                alert('success')
-                location.reload()
-            } else {
-                alert(result.error.message)
+                if (result.status === 'ok') {
+                    alert('success')
+                    location.reload()
+                } else {
+                    alert(result.error.message)
+                }
             }
-        }
-    </script>
+        </script>
 </body>
 
 </html>
