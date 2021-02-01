@@ -2,7 +2,13 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const URI = 'mongodb://localhost:27017/dispense';
-mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+(async () => {
+    try {
+        await mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+    } catch (err) {
+        console.log('error: ' + err)
+    }
+})()
 const admin = require('../model/admin');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
