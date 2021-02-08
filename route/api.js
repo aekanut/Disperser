@@ -1,14 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const URI = 'mongodb://localhost:27017/dispense';
-(async () => {
-    try {
-        await mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
-    } catch (err) {
-        console.log('error: ' + err)
-    }
-})()
+//const URI = 'mongodb://localhost:27017/dispense';
+const URI = 'mongodb+srv://root:root@cluster0.jk4w7.mongodb.net/dispense'
+mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+
 const studentCard = require('../model/memberbystudentcard');
 const idCard = require('../model/memberbyidcard');
 const session = require('express-session');

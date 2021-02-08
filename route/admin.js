@@ -1,14 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const URI = 'mongodb://localhost:27017/dispense';
-(async () => {
-    try {
-        await mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
-    } catch (err) {
-        console.log('error: ' + err)
-    }
-})()
+//const URI = 'mongodb://localhost:27017/dispense';
+const URI = 'mongodb+srv://root:root@cluster0.jk4w7.mongodb.net/dispense'
+mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 const admin = require('../model/admin');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
@@ -38,20 +33,24 @@ const ifLoggedIn = (req, res, next) => {
         return res.send("Don't hack please")
     }
 }
-/*router.post('/register', async (req, res) => {
+router.post('/register', async (req, res) => {
     const { username, password: pass } = req.body;
+    console.log(username, pass)
     const password = await bcrypt.hash(pass, 10);
     try {
         const response = await admin.create({
             username,
             password
+        }, (err, data) => {
+            if (err) return console.log(err)
+            console.log(data)
         })
         console.log('success :', response);
     } catch (err) {
         res.json({ status: 'error' });
     }
     res.json({ status: 'ok' });
-})*/
+})
 
 router.post('/login', ifNotLoggedIn, async (req, res) => {
     const { username, password } = req.body;
