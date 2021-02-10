@@ -16,11 +16,15 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "extend": "^3.0.2",
+    "hex2imagebase64": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
+    "legacy-encoding": "^3.0.0",
     "mongoose": "^5.11.9",
     "mongoose-auto-increment": "^5.0.1",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.7",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "smartcard": "^1.0.37",
+    "socket.io": "^3.1.1"
   }
 }

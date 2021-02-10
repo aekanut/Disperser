@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 //const URI = 'mongodb://localhost:27017/dispense';
 const URI = 'mongodb+srv://root:root@cluster0.jk4w7.mongodb.net/dispense'
 mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).
-catch(error => handleError(error));
+    catch(error => handleError(error));
 const studentCard = require('../model/memberbystudentcard');
 const idCard = require('../model/memberbyidcard');
 const session = require('express-session');
@@ -31,7 +31,7 @@ router.get('/allidcard', ifNotLoggedIn, async (req, res) => {
         const allIdCard = await idCard.find({}).sort('_id')
         return res.json(allIdCard)
     } catch (err) {
-        return res.json({status: 'error'})
+        return res.json({ status: 'error' })
     }
 })
 
@@ -40,7 +40,7 @@ router.get('/allstudentcard', ifNotLoggedIn, async (req, res) => {
         const allIdCard = await studentCard.find({})
         return res.json(allIdCard)
     } catch (err) {
-        return res.json({status: 'error'})
+        return res.json({ status: 'error' })
     }
 })
 
@@ -48,24 +48,24 @@ router.post('/oneidcard', ifNotLoggedIn, async (req, res) => {
     try {
         let { idcard } = req.body;
         console.log(idcard)
-        const thisIdCard = await idCard.find({idcard}).sort('_id')
+        const thisIdCard = await idCard.find({ idcard }).sort('_id')
         console.log(thisIdCard)
         return res.json(thisIdCard)
     } catch (err) {
-        return res.json({status: 'error'})
+        return res.json({ status: 'error' })
     }
 })
 
 router.post('/addidcard', ifNotLoggedIn, async (req, res) => {
     let { firstname, lastname, idcard, dateofbirth } = req.body;
     const DATE = new Date();
-    let sec; 
+    let sec;
     if (DATE.getSeconds() < 10) {
         sec = 0 + DATE.getSeconds().toString()
     } else {
         sec = DATE.getSeconds()
     }
-    let date = `Date: ${DATE.getDate()}-${DATE.getMonth()+1}-${DATE.getFullYear()} Time: ${DATE.getHours()}:${DATE.getMinutes()}:${sec}`
+    let date = `Date: ${DATE.getDate()}-${DATE.getMonth() + 1}-${DATE.getFullYear()} Time: ${DATE.getHours()}:${DATE.getMinutes()}:${sec}`
     try {
         const response = await idCard.create({
             firstname,
@@ -74,7 +74,7 @@ router.post('/addidcard', ifNotLoggedIn, async (req, res) => {
             dateofbirth,
             Date: date
         })
-        
+
     } catch (err) {
         console.log(err.error)
         return res.json({ status: 'error', error: err })
@@ -91,7 +91,7 @@ router.post('/addstudentcard', ifNotLoggedIn, async (req, res) => {
     } else {
         let sec = DATE.getSeconds()
     }
-    let date = `Date: ${DATE.getDate()}-${DATE.getMonth()+1}-${DATE.getFullYear()} Time: ${DATE.getHours()}:${DATE.getMinutes()}:${sec}`
+    let date = `Date: ${DATE.getDate()}-${DATE.getMonth() + 1}-${DATE.getFullYear()} Time: ${DATE.getHours()}:${DATE.getMinutes()}:${sec}`
     try {
         const response = await studentCard.create({
             firstname,
@@ -100,7 +100,7 @@ router.post('/addstudentcard', ifNotLoggedIn, async (req, res) => {
             faculty,
             Date: date
         })
-        
+
     } catch (err) {
         return res.json({ status: 'error', error: err })
     }
@@ -120,12 +120,12 @@ router.post('/deletestudentcard', ifNotLoggedIn, async (req, res) => {
 
 router.post('/deleteidcard', ifNotLoggedIn, async (req, res) => {
     let { idcard } = req.body;
-    
+
     try {
         const user = await idCard.deleteOne({ idcard })
         console.log(user)
-        if (!user.n){
-            return res.json({ status: 'error'})
+        if (!user.n) {
+            return res.json({ status: 'error' })
         }
     } catch (err) {
         return res.json({ status: 'error', error: err })
@@ -142,10 +142,10 @@ router.put('/editstudentcard', ifNotLoggedIn, async (req, res) => {
         )
         console.log(user)
         return res.json({ status: 'ok', data: user })
-        } catch (err) {
+    } catch (err) {
         return res.json({ status: "error", error: err })
     }
-    
+
 })
 
 router.put('/editidcard', ifNotLoggedIn, async (req, res) => {
@@ -156,8 +156,8 @@ router.put('/editidcard', ifNotLoggedIn, async (req, res) => {
             update
         )
         return res.json({ status: 'ok', data: user })
-        
-        } catch (err) {
+
+    } catch (err) {
         return res.json({ status: "error", error: err })
     }
 })

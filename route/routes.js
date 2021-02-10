@@ -37,6 +37,10 @@ router.get('/main', ifNotLoggedIn, async (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'static', 'main.html'))
 })
 
+router.get('/check', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'static', 'newtest.html'))
+})
+
 router.get('/main/idcard', ifNotLoggedIn, async (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'static', 'add', 'addidcard.html'))
 })

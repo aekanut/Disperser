@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Check Member</title>
+    <script src="./socket.io.js"></script>
     <style>
         body {
             margin: 0px;
@@ -16,12 +17,12 @@
         }
 
         .container {
-            display: flex;
+            display: none;
             margin-left: 10%;
         }
 
         .row {
-            margin-left: 10%;   
+            margin-left: 10%;
             margin-top: 2%;
         }
 
@@ -45,7 +46,7 @@
             margin-top: 2%;
         }
 
-        .text-center {  
+        .text-center {
             text-align: center;
             font-size: 40px;
             font-weight: bold;
@@ -78,11 +79,53 @@
                 <div id="checkmember" style="font-size:25px;"></div>
             </div>
         </div>
-        
+
     </div>
 
     <script>
-        let data = {
+        let socket = io.connect('http://localhost:3000/check')
+        socket.on('connect', function () {
+            socket.emit('set-query', {
+                query: [
+                    'cid',
+                    'name',
+                    'nameEn',
+                    'dob',
+                    'gender',
+                    'issuer',
+                    'issueDate',
+                    'expireDate',
+                    'address',
+                    'photo',
+                    'nhso'
+                ]
+            });
+        });
+        socket.on('smc-data', function (data) {
+            console.log(data);
+            document.querySelector('.container').style.display = "block";
+            document.getElementById('photo').innerHTML = `<img src="data:image/png;base64,${data.data.photo}"/>`
+            document.getElementById('name').innerHTML = `${data.data.name.prefix} ${data.data.name.firstname} ${data.data.name.lastname}`
+            document.getElementById('idcard').innerHTML = data.data.cid
+            document.getElementById('dateofbirth').innerHTML = data.data.dob
+        });
+        socket.on('smc-error', function (data) {
+            console.log(data);
+            dataEl.innerHTML = JSON.stringify(data)
+        });
+        socket.on('smc-removed', function (data) {
+            console.log(data);
+            dataEl.innerHTML = JSON.stringify(data)
+        });
+        socket.on('smc-incorrect', function (data) {
+            console.log(data);
+            dataEl.innerHTML = JSON.stringify(data)
+        });
+        socket.on('smc-inserted', function (data) {
+            console.log(data);
+            dataEl.innerHTML = JSON.stringify(data)
+        });
+        /*let data = {
             data: {
                 cid: "1739901824941",
                 dob: "1999-05-21",
@@ -99,7 +142,7 @@
         document.getElementById('name').innerHTML = `${data.data.name.prefix} ${data.data.name.firstname} ${data.data.name.lastname}`
         document.getElementById('idcard').innerHTML = data.data.cid
         document.getElementById('dateofbirth').innerHTML = data.data.dob
-        
+
         let checkMember = false
         if (checkMember) {
             document.getElementById('checkmember').style.color = 'blue'
@@ -108,6 +151,7 @@
             document.getElementById('checkmember').style.color = 'red'
             document.getElementById('checkmember').innerHTML = "You aren't member"
         }
+        */
 
     </script>
 </body>

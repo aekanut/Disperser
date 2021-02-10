@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 //const URI = 'mongodb://localhost:27017/dispense';
 const URI = 'mongodb+srv://root:root@cluster0.jk4w7.mongodb.net/dispense'
 mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).
-catch(error => handleError(error));
+    catch(error => handleError(error));
 const admin = require('../model/admin');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
