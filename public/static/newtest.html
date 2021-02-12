@@ -116,6 +116,9 @@
         socket.on('smc-removed', function (data) {
             console.log(data);
             dataEl.innerHTML = JSON.stringify(data)
+            setTimeout(() => {
+                document.querySelector('.container').style.display = "none"
+            },2000)
         });
         socket.on('smc-incorrect', function (data) {
             console.log(data);
