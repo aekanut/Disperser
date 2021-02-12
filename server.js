@@ -5,7 +5,7 @@ const api = require('./route/api')
 const admin = require('./route/admin')
 const path = require('path');
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, { cors: { origin: "http://localhost:3000", methods: ["GET", "POST"], transports: ['websocket', 'polling'], credentials: true }, allowEIO3: true });
 const smc = require('./src/smc');
 
 const PORT = 3000;
