@@ -17,7 +17,7 @@
         }
 
         .container {
-            display: none;
+            display: flex;
             margin-left: 10%;
         }
 
@@ -56,6 +56,12 @@
             font-size: 20px;
             font-weight: bold;
         }
+
+        #status {
+            margin-left: 33%;
+            margin-top: 20%;
+            font-size: 25px;
+        }
     </style>
 </head>
 
@@ -68,13 +74,11 @@
         </div>
         <br>
         <div class="container">
-            <div id="photo"></div><br>
+            <div id="status">Please insert card</div>
+            <div id="photo"></div>
             <div class="row">
-                <div class="topic">Name</div><br>
                 <div id="name"></div><br>
-                <div class="topic">Date of birth</div><br>
                 <div id="dateofbirth"></div><br>
-                <div class="topic">ID Card</div><br>
                 <div id="idcard"></div><br><br>
                 <div id="checkmember" style="font-size:25px;"></div>
             </div>
@@ -89,72 +93,55 @@
                 query: [
                     'cid',
                     'name',
-                    'nameEn',
                     'dob',
-                    'gender',
-                    'issuer',
-                    'issueDate',
-                    'expireDate',
-                    'address',
-                    'photo',
-                    'nhso'
+                    'photo'
                 ]
             });
         });
         socket.on('smc-data', function (data) {
             console.log(data);
-            document.querySelector('.container').style.display = "block";
-            document.getElementById('photo').innerHTML = `<img src="data:image/png;base64,${data.data.photo}"/>`
-            document.getElementById('name').innerHTML = `${data.data.name.prefix} ${data.data.name.firstname} ${data.data.name.lastname}`
-            document.getElementById('idcard').innerHTML = data.data.cid
-            document.getElementById('dateofbirth').innerHTML = data.data.dob
+            document.querySelector('#status').style.display = "none"
+            document.querySelector('.container').style.display = "flex"
+            document.getElementById('photo').style.display = ""
+            document.getElementById('name').style.display = ""
+            document.getElementById('idcard').style.display = ""
+            document.getElementById('dateofbirth').style.display = ""
+            document.getElementById('photo').innerHTML = `<img height="355" width="297" src="data:image/png;base64,${data.data.photo}"/><br>`
+            document.getElementById('name').innerHTML = `<div class="topic">Name</div><br>${data.data.name.prefix} ${data.data.name.firstname} ${data.data.name.lastname}`
+            document.getElementById('idcard').innerHTML = `<div class="topic">ID Card</div><br>${data.data.cid}`
+            document.getElementById('dateofbirth').innerHTML = `<div class="topic">Date of birth</div><br>${data.data.dob}`
         });
         socket.on('smc-error', function (data) {
             console.log(data);
-            //dataEl.innerHTML = JSON.stringify(data)
+            document.querySelector('#status').style.display = "block"
+            document.querySelector('#status').innerHTML = data.description
         });
+
         socket.on('smc-removed', function (data) {
             console.log(data);
             //dataEl.innerHTML = JSON.stringify(data)
             setTimeout(() => {
-                document.querySelector('.container').style.display = "none"
-            },2000)
+                document.getElementById('photo').style.display = "none"
+                document.getElementById('name').style.display = "none"
+                document.getElementById('idcard').style.display = "none"
+                document.getElementById('dateofbirth').style.display = "none"
+                document.querySelector('#status').style.display = ""
+                document.querySelector('#status').innerHTML = data.description
+                setTimeout(() => {
+                    document.querySelector('#status').innerHTML = 'Please insert card'
+                },1000)
+            }, 2000)
         });
         socket.on('smc-incorrect', function (data) {
             console.log(data);
-            //dataEl.innerHTML = JSON.stringify(data)
+            document.querySelector('#status').style.display = ""
+            document.querySelector('#status').innerHTML = data.description
         });
         socket.on('smc-inserted', function (data) {
             console.log(data);
-            //dataEl.innerHTML = JSON.stringify(data)
+            document.querySelector('#status').style.display = ""
+            document.querySelector('#status').innerHTML = data.description
         });
-        /*let data = {
-            data: {
-                cid: "1739901824941",
-                dob: "1999-05-21",
-                name: {
-                    prefix: "นาย",
-                    firstname: "เอกณัฐ",
-                    lastname: "รังสีวรรธนะ"
-                },
-                photo: "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAEMuMjoyKkM6NjpLR0NPZKZsZFxcZMySmnmm8dT++u3U6eX//////////+Xp////////////////////////////2wBDAUdLS2RXZMRsbMT//+n/////////////////////////////////////////////////////////////////////wAARCAFjASkDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwC/RRRQAwyBTg5pPOX0P5VJRQBH5y+jflR5w/ut+VSUUAReeP7jflR5/wDsP+VS0UARef8A9M3/ACo87/pm/wCVS0UARecf+eb/AJUecf8Ank/5VLRQBD5zf88no85v+eTVNRQBD5z/APPFqPOf/ni1TUUAQ+dJ/wA8Wo86T/ni1TUUAQ+dJ/zxP50ebL/zxP51NRQBD5sv/PE/nR5sv/PH9amooAh82X/nj+tHmTf88v1qaigCHzJv+eX60eZN/wA8v1qaigCHzJv+eQ/OjfN/zzH51NRQBDvm/wCeY/OjfP8A88x+dTUUAQ75/wDnmPzo3z/88x+dTUUAQ75v+eY/Ol3Tf88x+dS0UAMQyE/OoAp9FFABRRRQAUUUUAFFMd9vAHNCEsme9AD6KgcyIOWqQsVi3d8UAPoqrvk2b9/fGKsRtvQN60AOooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKZIXC/IATQA+iqtqxaViTninzRZ3PuI46UAT0VXtM7WNM/wBbcFWJxk0AW6KrWzHcVJ4qzQAUUUUAFFFFADJfuURfcFLIMrxRGMLzQBFPy4Wnzf6o03aTNkg4qR13IRQBX/5d/wDgVTQf6pah2vs2bD1zmpgGSIBRlhQBJRUG+f8AuCjfP/cFAE9FQb7j+4KN1x/cFAE9FV91x/dFG65/uigCxRVfNz/dFIWuPRaALNFVt9x7UhlmAyStAFqiqX2iT1H5UvnyYzuFAFyiqoec9GX9KUfaT0I/SgCzRVfFz6ijFz/eFAFiiq+Ln+8KNtz/AHhQBYoqvtuf7wo23P8AfFAFiiq+24/virHagCpaf61vpU1ycRH3NNghaNyTjGKdPG0gAXHFABbDEQ9+aij/AOPo/U1YRdqAegqJonEu9MfjQAy2/wBafpVqoYIihJbqamoAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACms4HBOKSR9oqo8xbIxQBYadRx3qrJMXPNRs2abnigB4c+tJuOKaKKYC5ozQKKAFDEdDUsc7KPUVFSEUgL0dwrDng1MCD0rLBwanhuNvB5FAF6ioROuQPWpqACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKazADOaSQkIcHFUHkY8E0ASzT7jheBUBNFJQAUlFFMBDQKD1ooAXNHSkoNACg04GmUA0AONJS5ooAM1bt5SchjVOnK23pSA0waWq0cwJ+Y1YBz0oAWikpaACiiigAooooAKKKKACiiigAooooAad+eMYpuJfUVJRQBHiX1FJib+8tS0UARbZv760bZv74/KpaKAIds3/PQflRsm/wCeg/KpqQnAyaAKczyL8pfNQU6Vi8hNNPFACE0lFFAC0lAFOC0ANoxUgjJpwiouBDilC5qby6NlK47EBFJipmSoyMUxCClGKSgUAKRSUtFAADU0TM52h2FQEVLCQHFAFryH/wCezUeQ3/PZqmByKKAIfIb/AJ6tR5Df89WqaloAh8lv+erUeS3/AD1apqKAI0jKnJct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MUsa5ce1AE1FLRVEiUUUUAFLRRQAlFLRQAlFLRQAUUUUAFFFFABRRRQAUUUUAFFFFACMMio6lpjL3pMaGUUuKTFIYUmKWikAmKTFOopgNxRtp1FADdtGKdSUAGKKKWgApKXFLQAmKkjGBn1poGTUlNCYUUUUxBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAwjFJTyM0wjFIYlJTqSkMSilpKQBRRRTAKKKKACloooAKWinKuOtAhVGBS0UVQgooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACkIzS0UARkYpKlppX0pWHcZSUpFFIYlFLSUAFFLRQAUYpwUmnAYosK4irinUUVQgooooAKKKKACiiigAooooAKKKKAEpaSloAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAIzURoopMaCiiikMKeooooQmOoooqhBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFACUtFFAH/2SAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg"
-            }
-        }
-
-        document.getElementById('photo').innerHTML = `<img src="data:image/png;base64,${data.data.photo}"/>`
-        document.getElementById('name').innerHTML = `${data.data.name.prefix} ${data.data.name.firstname} ${data.data.name.lastname}`
-        document.getElementById('idcard').innerHTML = data.data.cid
-        document.getElementById('dateofbirth').innerHTML = data.data.dob
-
-        let checkMember = false
-        if (checkMember) {
-            document.getElementById('checkmember').style.color = 'blue'
-            document.getElementById('checkmember').innerHTML = 'You are member'
-        } else {
-            document.getElementById('checkmember').style.color = 'red'
-            document.getElementById('checkmember').innerHTML = "You aren't member"
-        }
-        */
 
     </script>
 </body>
