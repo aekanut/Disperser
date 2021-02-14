@@ -1,20 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete ID Card</title>
+    <style>
+        body {
+            background-color: rgb(151, 200, 240);
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        table {
+            width: 100%
+        }
+
+        th {
+            width: 16.67%;
+        }
+
+        thead {
+            background: #666;
+            color: #fff;
+        }
+
+        td {
+            padding: 5px;
+        }
+
+        tbody {
+            background: #e8ebf1;
+            color: black;
+        }
+
+        .myButtonRed {
+            box-shadow: 0px 10px 14px -7px #8a2a21;
+            background: linear-gradient(to left, #f05b4d 5%, #bd291e 100%);
+            background-color: #f05b4d;
+            border-radius: 8px;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Arial;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 13px 32px;
+            text-decoration: none;
+            text-shadow: 0px 1px 0px #810e05;
+            transform: scale(0.80);
+        }
+
+        .myButtonRed:hover {
+            background: linear-gradient(to left, #bd291e 5%, #f05b4d 100%);
+            background-color: #bd291e;
+        }
+
+        .myButtonRed:active {
+            position: relative;
+            top: 1px;
+        }
+
+    </style>
 </head>
+
 <body>
-    Text ID card for delete member
+    <a href="/main">back to main</a>
+    <h1>Fill ID card for delete member</h1>
     <form id="deletess">
         ID Card
-        <input type="text" name="idcard" id="idcard" placeholder="ID Card" pattern="[0-9]{13}" maxlength="13" minlength="13" required><br>
-        <input type="submit">
+        <input type="text" name="idcard" id="idcard" placeholder="ID Card" pattern="[0-9]{13}" maxlength="13"
+            minlength="13" required><input type="submit">
     </form>
-    <br><br>
-    <a href="/main">back to main</a>
+    <div class="idCard"></div><br><br>
     
+
     <script>
         const deletes = document.getElementById('deletess')
         deletes.addEventListener('submit', deleteOne)
@@ -24,7 +83,7 @@
 
             const idcard = document.getElementById('idcard').value
 
-            const result = await fetch('/api/deleteidcard',{
+            const result = await fetch('/api/deleteidcard', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -41,6 +100,61 @@
                 alert('change id card')
             }
         }
+
+        fetch('/api/allidcard').
+            then(res => res.json()).
+            then(data => {
+                let dataTable = `<table><thead><tr><th>Click Red button for Delete</th><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
+Registration Date</th></tr></thead><tbody>`
+                let i=0;
+                data.forEach(element => {
+                    dataTable += `<tr name="${element.idcard}">
+                                    <th>
+                                        <div class="myButtonRed" id="${i++}" onclick="deleteIdCard(this.id)">
+                                            Click for Delete
+                                        </div>
+                                    </th>
+                                    <th>
+                                        ${element.firstname}
+                                    </th>
+                                    <th>
+                                        ${element.lastname}
+                                    </th>
+                                    <th>
+                                        ${element.idcard}
+                                    </th>
+                                    <th>
+                                        ${element.dateofbirth}
+                                    </th>
+                                    <th>
+                                        ${element.Date}
+                                    </th>
+                                </tr>`
+                });
+                dataTable += '</table></tbody>'
+                document.getElementsByClassName('idCard')[0].innerHTML = dataTable;
+            })
+
+        const deleteIdCard = async (index) => {
+            const idCard = document.getElementById(index).parentNode.parentNode.children[3].outerText
+            const result = await fetch('/api/deleteidcard', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    idcard: idCard
+                })
+            }).then((res) => res.json())
+
+            if (result.status === 'ok') {
+                alert('success')
+                document.getElementsByName(idCard)[0].style.display = 'none'
+            } else {
+                alert('failed')
+            }
+        }
     </script>
 </body>
+
 </html>

@@ -10,13 +10,35 @@
             background-color: rgb(151, 200, 240);
             font-family: 'Ubuntu', sans-serif;
         }
+
+        table {
+            width: 100%
+        }
+
+        th {
+            width: 16.67%;
+        }
+
+        thead {
+            background: #666;
+            color: #fff;
+        }
+
+        td {
+            padding: 5px;
+        }
+
+        tbody {
+            background: #e8ebf1;
+            color: black;
+        }
     </style>
 </head>
 
 <body>
     <form id="addIdCard">
         <a href="/main">back to main</a>
-        <h1>ADD ID Card</h1><br>
+        <h1>ADD ID Card</h1>
         First Name<br>
         <input type="text" name="firstname" id="firstname" placeholder="First Name" required><br>
         Last Name<br>
@@ -29,21 +51,21 @@
         <input type="submit">
         <br><br>
         <div class="idCard"></div>
-
+    </form>
         <script>
             fetch('/api/allidcard', {
-            method: 'GET'
-        }).
-            then(res => res.json()).
-            then(data => {
-                let dataTable = `<table><thead><tr><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
+                method: 'GET'
+            }).
+                then(res => res.json()).
+                then(data => {
+                    let dataTable = `<table><thead><tr><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
 Registration Date</th></tr></thead><tbody>`
-                data.forEach(element => {
-                    dataTable += `<tr name='${element.idcard}'><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.idcard}</th><th>${element.dateofbirth}</th><th>${element.Date}</th></tr>`
-                });
-                dataTable += '</table></tbody>'
-                document.getElementsByClassName('idCard')[0].innerHTML = dataTable;
-            })
+                    data.forEach(element => {
+                        dataTable += `<tr name='${element.idcard}'><th>${element.firstname}</th><th>${element.lastname}</th><th>${element.idcard}</th><th>${element.dateofbirth}</th><th>${element.Date}</th></tr>`
+                    });
+                    dataTable += '</table></tbody>'
+                    document.getElementsByClassName('idCard')[0].innerHTML = dataTable;
+                })
 
             const addIdCard = document.getElementById('addIdCard');
             addIdCard.addEventListener('submit', idcards);
@@ -72,7 +94,8 @@ Registration Date</th></tr></thead><tbody>`
                     alert('success')
                     location.reload()
                 } else {
-                    alert(result.error.message)
+                    console.log(result.error)
+                    alert("error")
                 }
             }
         </script>

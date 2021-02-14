@@ -1,20 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete Student Card</title>
+    <style>
+        body {
+            background-color: rgb(151, 200, 240);
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        table {
+            width: 100%
+        }
+
+        th {
+            width: 16.67%;
+        }
+
+        thead {
+            background: #666;
+            color: #fff;
+        }
+
+        td {
+            padding: 5px;
+        }
+
+        tbody {
+            background: #e8ebf1;
+            color: black;
+        }
+
+        .myButtonRed {
+            box-shadow: 0px 10px 14px -7px #8a2a21;
+            background: linear-gradient(to left, #f05b4d 5%, #bd291e 100%);
+            background-color: #f05b4d;
+            border-radius: 8px;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Arial;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 13px 32px;
+            text-decoration: none;
+            text-shadow: 0px 1px 0px #810e05;
+            transform: scale(0.80);
+        }
+
+        .myButtonRed:hover {
+            background: linear-gradient(to left, #bd291e 5%, #f05b4d 100%);
+            background-color: #bd291e;
+        }
+
+        .myButtonRed:active {
+            position: relative;
+            top: 1px;
+        }
+    </style>
 </head>
+
 <body>
-    Text Student card for delete member
+    <a href="/main">back to main</a>
+    <h1>Fill Student card box for delete member</h1>
     <form id="deletess">
         Student Card
-        <input type="text" name="studentcard" id="studentcard" placeholder="Student Card" pattern="[0-9]{8}" maxlength="8" minlength="8" required><br>
+        <input type="text" name="studentcard" id="studentcard" placeholder="Student Card" pattern="[0-9]{8}"
+            maxlength="8" minlength="8" required>
         <input type="submit">
     </form>
-    <br><br>
-    <a href="/main">back to main</a>
-    
+    <div class="studentCard"></div><br><br>
+
+
+
     <script>
         const deletes = document.getElementById('deletess')
         deletes.addEventListener('submit', deleteOne)
@@ -24,7 +84,7 @@
 
             const studentcard = document.getElementById('studentcard').value
 
-            const result = await fetch('/api/deletestudentcard',{
+            const result = await fetch('/api/deletestudentcard', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -41,6 +101,61 @@
                 alert('change student card')
             }
         }
+
+        fetch('/api/allstudentcard').
+            then(res => res.json()).
+            then(data => {
+                let dataTable = `<table><thead><tr><th>Click Red button for delete</th><th>First Name</th><th>Last Name</th><th>Student Card</th><th>Faculty</th><th>
+Registration Date</th></tr></thead><tbody>`
+                let i = 0;
+                data.forEach(element => {
+                    dataTable += `<tr name="${element.studentcard}">
+                                    <th>
+                                        <div class="myButtonRed" id="${i++}" onclick="deleteStudentCard(this.id)">
+                                            Click for delete
+                                        </div>
+                                    </th>
+                                    <th>
+                                        ${element.firstname}
+                                    </th>
+                                    <th>
+                                        ${element.lastname}
+                                    </th>
+                                    <th>
+                                        ${element.studentcard}
+                                    </th>
+                                    <th>
+                                        ${element.faculty}
+                                    </th>
+                                    <th>
+                                        ${element.Date}
+                                    </th>
+                                </tr>`
+                });
+                dataTable += '</table></tbody>'
+                document.getElementsByClassName('studentCard')[0].innerHTML = dataTable;
+            })
+
+        const deleteStudentCard = async (index) => {
+            const studentCard = document.getElementById(index).parentNode.parentNode.children[3].outerText
+            const result = await fetch('/api/deletestudentcard', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    studentcard: studentCard
+                })
+            }).then((res) => res.json())
+
+            if (result.status === 'ok') {
+                alert('success')
+                document.getElementsByName(studentCard)[0].style.display = 'none'
+            } else {
+                alert('failed')
+            }
+        }
     </script>
 </body>
+
 </html>

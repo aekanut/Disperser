@@ -10,12 +10,35 @@
             background-color: rgb(151, 200, 240);
             font-family: 'Ubuntu', sans-serif;
         }
+
+        table {
+            width: 100%
+        }
+
+        th {
+            width: 16.67%;
+        }
+
+        thead {
+            background: #666;
+            color: #fff;
+        }
+
+        td {
+            padding: 5px;
+        }
+
+        tbody {
+            background: #e8ebf1;
+            color: black;
+        }
     </style>
 </head>
 
 <body>
     <form id="addstudentcard">
-        Add Student Card<br>
+        <a href="/main">back to main</a>
+        <h1>Add Student Card</h1>
         First Name<br>
         <input type="text" name="firstname" id="firstname" placeholder="First Name" required><br>
         Last Name<br>
@@ -28,7 +51,6 @@
         <input type="submit">
     </form>
     <br><br>
-    <a href="/main">back to main</a>
     <div class="studentCard"></div>
 
     <script>
@@ -72,7 +94,7 @@ Registration Date</th></tr></thead><tbody>`
                 alert("success")
                 location.reload()
             } else {
-                alert(result.error.message)
+                alert("error")
             }
 
         }

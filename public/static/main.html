@@ -192,8 +192,8 @@
             </div>
             <br><br>
             <div class="container">
-                <div class="myButtonSky" onclick="showAllIdcard()">Show all ID Card</div>
-                <div class="myButtonSky" onclick="showAllStudentcard()">Show all Student Card</div>
+                <a class="myButtonSky" href="/main/showallidcard">Show all ID Card</a>
+                <a class="myButtonSky" href="/main/showallstudentcard">Show all Student Card</a>
             </div><br><br>
             <div class="container">
                 <div class="myButtonOut" onclick="logout()">Logout</div>
@@ -205,10 +205,10 @@
             </div>
             <br><br>
             <div class="container">
-                <div class="myButtonGreen" onclick="idCard()">Add By ID Card</div>
+                <a class="myButtonGreen" href="/main/idcard">Add By ID Card</a>
             </div><br><br>
             <div class="container">
-                <div class="myButtonGreen" onclick="studentCard()">Add By Student Card</div>
+                <a class="myButtonGreen" href="/main/student">Add By Student Card</a>
             </div>
         </div>
     </div>
@@ -219,10 +219,10 @@
             </div>
             <br><br>
             <div class="container">
-                <div class="myButtonBlue" onclick="editIdCard()">Edit By ID Card</div>
+                <a class="myButtonBlue" href="/main/editidcard">Edit By ID Card</a>
             </div><br><br>
             <div class="container">
-                <div class="myButtonBlue" onclick="editStudentCard()">Edit By Student Card</div>
+                <a class="myButtonBlue" href='/main/editstudentcard'>Edit By Student Card</a>
             </div>
         </div>
         <div class="item">
@@ -231,10 +231,10 @@
             </div>
             <br><br>
             <div class="container">
-                <div class="myButtonRed" onclick="deleteIdCard()">Delete By ID Card</div>
+                <a class="myButtonRed" href="/main/deleteidcard">Delete By ID Card</a>
             </div><br><br>
             <div class="container">
-                <div class="myButtonRed" onclick="deleteStudentCard()">Delete By Student Card</div>
+                <a class="myButtonRed" href="/main/deletestudentcard">Delete By Student Card</a>
             </div>
         </div>
     </div>
@@ -251,39 +251,6 @@
             }
 
         }
-
-        const showAllIdcard = () => {
-            location.replace("/main/showallidcard")
-        }
-
-        const showAllStudentcard = () => {
-            location.replace("/main/showallstudentcard")
-        }
-
-        const idCard = () => {
-            location.replace("/main/idcard")
-        }
-
-        const studentCard = () => {
-            location.replace("/main/student")
-        }
-
-        const editIdCard = () => {
-            location.replace("/main/editidcard")
-        }
-
-        const editStudentCard = () => {
-            location.replace("/main/editstudentcard")
-        }
-
-        const deleteIdCard = () => {
-            location.replace('/main/deleteidcard')
-        }
-
-        const deleteStudentCard = () => {
-            location.replace('/main/deletestudentcard')
-        }
-
     </script>
 </body>
 

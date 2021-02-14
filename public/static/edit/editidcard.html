@@ -33,10 +33,10 @@
         }
 
 
-        .myButtonGreen {
-            box-shadow: 0px 10px 14px -7px #7ab85e;
-            background: linear-gradient(to left, #93c27c 5%, #5e9940 100%);
-            background-color: #93c27c;
+        .myButtonBlue {
+            box-shadow: 0px 10px 14px -7px #a1b5ed;
+            background: linear-gradient(to left, #97b1de 5%, #4f7db5 100%);
+            background-color: #97b1de;
             border-radius: 8px;
             display: inline-block;
             cursor: pointer;
@@ -46,87 +46,40 @@
             font-weight: bold;
             padding: 13px 32px;
             text-decoration: none;
-            text-shadow: 0px 1px 0px #487a27;
-            transform: scale(0.7);
+            text-shadow: 0px 1px 0px #283966;
+            transform: scale(0.8);
         }
 
-        .myButtonGreen:hover {
-            background: linear-gradient(to left, #5e9940 5%, #93c27c 100%);
-            background-color: #5e9940;
+        .myButtonBlue:hover {
+            background: linear-gradient(to left, #4f7db5 5%, #97b1de 100%);
+            background-color: #4f7db5;
         }
 
-        .myButtonGreen:active {
+        .myButtonBlue:active {
             position: relative;
             top: 1px;
-        }
-
-        .modal {
-            display: none;
-            /* Hidden by default */
-            position: fixed;
-            /* Stay in place */
-            z-index: 1;
-            /* Sit on top */
-            padding-top: 100px;
-            /* Location of the box */
-            left: 0;
-            top: 0;
-            width: 100%;
-            /* Full width */
-            height: 100%;
-            /* Full height */
-            overflow: auto;
-            /* Enable scroll if needed */
-            background-color: rgb(0, 0, 0);
-            /* Fallback color */
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Black w/ opacity */
-        }
-
-        /* Modal Content */
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-
-        /* The Close Button */
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
         }
     </style>
     <title>Edit ID Card</title>
 </head>
 
 <body>
-    <a href="/main">back to main</a><br><br>
-    ID Card
-    <div class="idCard"></div><br><br>
+    <a href="/main">back to main</a>
+    <h1>ID Card</h1>
+    <div class="idCard"></div>
 
     <script>
 
         fetch('/api/allidcard').
             then(res => res.json()).
             then(data => {
-                let dataTable = `<table><thead><tr><th>Click Green button for edit</th><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
+                let dataTable = `<table><thead><tr><th>Click Blue button for edit</th><th>First Name</th><th>Last Name</th><th>ID Card</th><th>Date Of Birth</th><th>
 Registration Date</th></tr></thead><tbody>`
                 let i=0;
                 data.forEach(element => {
                     dataTable += `<tr name="${element.idcard}">
                                     <th>
-                                        <div class="myButtonGreen" id="${i++}" onclick="editIdCard(this.id)">
+                                        <div class="myButtonBlue" id="${i++}" onclick="editIdCard(this.id)">
                                             Click for edit
                                         </div>
                                     </th>
@@ -161,7 +114,7 @@ Registration Date</th></tr></thead><tbody>`
             document.getElementsByName(idCard)[0].innerHTML =
                 `<tr name="${oldText(3)}">
                 <th>
-                    <div class="myButtonGreen" id="${index}" onclick="saveIdCards(this.id)">
+                    <div class="myButtonBlue" id="${index}" onclick="saveIdCards(this.id)">
                         Click for save
                     </div>
                 </th>
@@ -212,7 +165,7 @@ Registration Date</th></tr></thead><tbody>`
                 document.getElementsByName(idCard)[0].innerHTML =
                 `<tr name="${oldText(3)}">
                     <th>
-                        <div class="myButtonGreen" id="${index}" onclick="editIdCard(this.id)">
+                        <div class="myButtonBlue" id="${index}" onclick="editIdCard(this.id)">
                             Click for edit
                         </div>
                     </th>

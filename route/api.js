@@ -87,9 +87,9 @@ router.post('/addstudentcard', ifNotLoggedIn, async (req, res) => {
     const DATE = new Date();
     let sec;
     if (DATE.getSeconds() < 10) {
-        let sec = 0 + DATE.getSeconds().toString()
+        sec = 0 + DATE.getSeconds().toString()
     } else {
-        let sec = DATE.getSeconds()
+        sec = DATE.getSeconds()
     }
     let date = `Date: ${DATE.getDate()}-${DATE.getMonth() + 1}-${DATE.getFullYear()} Time: ${DATE.getHours()}:${DATE.getMinutes()}:${sec}`
     try {
@@ -109,9 +109,9 @@ router.post('/addstudentcard', ifNotLoggedIn, async (req, res) => {
 
 router.post('/deletestudentcard', ifNotLoggedIn, async (req, res) => {
     let { studentcard } = req.body;
-
     try {
-        await studentCard.deleteOne({ studentcard })
+        const user = await studentCard.deleteOne({ studentcard })
+        if (!user.n) return res.json({ status: 'error'})
     } catch (err) {
         return res.json({ status: 'error', error: err })
     }
@@ -120,13 +120,9 @@ router.post('/deletestudentcard', ifNotLoggedIn, async (req, res) => {
 
 router.post('/deleteidcard', ifNotLoggedIn, async (req, res) => {
     let { idcard } = req.body;
-
     try {
         const user = await idCard.deleteOne({ idcard })
-        console.log(user)
-        if (!user.n) {
-            return res.json({ status: 'error' })
-        }
+        if (!user.n) return res.json({ status: 'error'})
     } catch (err) {
         return res.json({ status: 'error', error: err })
     }
